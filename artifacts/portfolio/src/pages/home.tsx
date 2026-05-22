@@ -4,6 +4,7 @@ import { TypeAnimation } from "react-type-animation";
 import { Terminal, Mail, Linkedin, MessageCircle } from "lucide-react";
 import { SiGithub, SiDiscord } from "react-icons/si";
 import { useToast } from "@/hooks/use-toast";
+import profilePhoto from "@assets/Untitled_(LinkedIn_Profile_Picture)_20260115_100743_0000_1779420104799.png";
 
 
 const SOCIAL_LINKS = {
@@ -252,12 +253,48 @@ export default function Home() {
               </motion.div>
             </div>
 
-            <div className="hidden md:flex w-[40%] justify-center items-center relative">
-              <div className="absolute w-[400px] h-[400px] rounded-full border-2 border-transparent bg-[linear-gradient(135deg,#7b2ff7,#7b2ff7)] [mask-image:linear-gradient(white,white),linear-gradient(white,white)] [mask-clip:padding-box,border-box] [mask-composite:exclude] p-[2px] animate-[rotate-ring_20s_linear_infinite]" />
-              <div className="absolute w-[250px] h-[250px] bg-[radial-gradient(circle,rgba(123,47,247,0.4)_0%,rgba(0,0,0,0)_70%)] blur-2xl z-0" />
-              <div className="font-['JetBrains_Mono'] text-9xl font-black gradient-text animate-float z-10 select-none">
-                DG
+            <div className="hidden md:flex w-[40%] justify-center items-center relative min-h-[420px]">
+              {/* Outer slow-spinning gradient ring */}
+              <div className="absolute w-[420px] h-[420px] rounded-full animate-[rotate-ring_8s_linear_infinite]"
+                style={{ background: 'conic-gradient(from 0deg, #7b2ff7, #a855f7, #c084fc, transparent, #7b2ff7)', padding: '3px', borderRadius: '50%' }}>
+                <div className="w-full h-full rounded-full bg-black" />
               </div>
+              {/* Inner counter-spinning ring */}
+              <div className="absolute w-[390px] h-[390px] rounded-full animate-[rotate-ring_14s_linear_infinite_reverse] opacity-40"
+                style={{ background: 'conic-gradient(from 180deg, #a855f7, transparent, #7b2ff7, transparent)', padding: '1px', borderRadius: '50%' }}>
+                <div className="w-full h-full rounded-full bg-transparent" />
+              </div>
+              {/* Glow blob behind photo */}
+              <div className="absolute w-[300px] h-[300px] rounded-full blur-3xl z-0"
+                style={{ background: 'radial-gradient(circle, rgba(123,47,247,0.6) 0%, rgba(168,85,247,0.2) 50%, transparent 70%)' }} />
+              {/* Floating particles ring — 8 small dots orbiting */}
+              {[...Array(8)].map((_, i) => (
+                <div key={i}
+                  className="absolute w-2 h-2 rounded-full bg-[#a855f7] opacity-70"
+                  style={{
+                    animation: `rotate-ring ${6 + i * 0.4}s linear infinite`,
+                    transformOrigin: '0 0',
+                    left: '50%',
+                    top: '50%',
+                    transform: `rotate(${i * 45}deg) translateX(210px) translateY(-4px)`,
+                    boxShadow: '0 0 6px #a855f7, 0 0 12px #7b2ff7',
+                  }}
+                />
+              ))}
+              {/* Profile photo */}
+              <motion.div
+                animate={{ y: [0, -12, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="relative z-10 w-[320px] h-[320px] rounded-full overflow-hidden"
+                style={{ boxShadow: '0 0 40px rgba(123,47,247,0.5), 0 0 80px rgba(123,47,247,0.2)' }}
+              >
+                <img
+                  src={profilePhoto}
+                  alt="Deep Ghosh"
+                  className="w-full h-full object-cover rounded-full"
+                  data-testid="profile-photo"
+                />
+              </motion.div>
             </div>
           </div>
         </section>
