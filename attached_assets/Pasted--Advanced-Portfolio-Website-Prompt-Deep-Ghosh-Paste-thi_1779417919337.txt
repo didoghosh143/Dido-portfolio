@@ -1,0 +1,272 @@
+# 🚀 Advanced Portfolio Website Prompt — Deep Ghosh
+### (Paste this entire prompt into Replit AI)
+
+---
+
+## MASTER PROMPT
+
+Build me a **stunning, fully animated, single-page portfolio website** for **Deep Ghosh** — a Computer Engineering student and AI Agent Engineering learner. The website must feel like a premium developer portfolio with advanced micro-animations, dark glassmorphism aesthetic, and smooth interactive elements. This is NOT a basic portfolio — every section must feel alive.
+
+---
+
+## 🎨 DESIGN SYSTEM & THEME
+
+### Color Palette
+- **Background:** Deep black `#050510` with subtle dark navy gradient `#0a0a1a`
+- **Primary Accent:** Electric cyan/blue `#00d4ff` — used for glows, highlights, borders
+- **Secondary Accent:** Purple/violet `#7b2ff7` — used for gradients and hover states
+- **Gradient Combo:** `linear-gradient(135deg, #00d4ff, #7b2ff7)` — apply to text, buttons, borders
+- **Text Primary:** `#ffffff`
+- **Text Secondary:** `#a0aec0`
+- **Card Background:** `rgba(255, 255, 255, 0.04)` with `backdrop-filter: blur(20px)`
+- **Glass Border:** `rgba(0, 212, 255, 0.15)`
+
+### Typography
+- **Primary Font:** `'Space Grotesk'` from Google Fonts — for headings
+- **Secondary Font:** `'Inter'` — for body text
+- **Code/Tech Font:** `'JetBrains Mono'` — for skill tags and code snippets
+- **Name/Hero Display:** Massive, bold, gradient text with letter-spacing
+
+### Visual Identity
+- Glassmorphism cards with blur, gradient borders, and inner glow
+- Floating gradient orbs in background (animated, slow-moving)
+- Subtle noise texture overlay on background
+- Everything has a neon glow feel — borders glow on hover
+- No harsh whites — everything is frosted, glowing, layered
+
+---
+
+## ✨ ANIMATIONS (CRITICAL — Must implement all)
+
+### Global
+- **Cursor:** Custom animated cursor — a glowing dot with a trailing ring that follows mouse
+- **Page Load:** Cinematic loader — progress bar with "Initializing..." text, then fade-in reveal
+- **Scroll:** Use `Intersection Observer` — every section animates IN as user scrolls (fade + slide up)
+- **Smooth Scroll:** CSS `scroll-behavior: smooth` + JS smooth scroll for nav links
+
+### Hero Section
+- **Typing animation** on the subtitle text (typewriter effect cycling through roles)
+- **Floating particles** in the background using `canvas` or `tsParticles` — connected dot network on dark background
+- **Hero photo** has a glowing cyan/purple border ring, rotating gradient border animation
+- Name text has a subtle shimmer/glint animation sweeping across
+
+### Navbar
+- On scroll: navbar gets frosted glass effect + subtle glow border at bottom
+- Active nav link has gradient underline animation
+- Mobile hamburger menu with smooth slide-down animation
+
+### Cards (Skills, Projects, Contact)
+- **Hover lift effect:** `transform: translateY(-8px)` with glow shadow intensifying
+- **Border glow on hover:** gradient border sweeps around card on hover
+- **Stagger animation:** cards animate in one by one with delay when section enters viewport
+
+### Skills Section
+- Skill bars animate width from 0 to percentage on scroll
+- OR skill tags pop in with a bouncy scale animation, staggered
+- Tech icons float with subtle `translateY` oscillation (breathing effect)
+
+### Projects Section
+- Cards flip or slide in from side
+- "Coming Soon" badge pulses with a glow animation
+
+### Contact Section
+- Form fields have glowing focus state with gradient underline
+- Submit button has shimmer sweep animation on hover
+
+---
+
+## 📐 LAYOUT & SECTIONS
+
+### 1. NAVBAR
+- Fixed top, transparent → frosted glass on scroll
+- Logo: `<DG />` styled as code tag with gradient color
+- Links: Home, About, Skills, Projects, Contact
+- Right side: a glowing "Hire Me" CTA button with gradient border
+- Hamburger menu for mobile
+
+### 2. HERO SECTION (Full viewport height)
+
+**Left side:**
+- Small badge text: `👋 Hello, I'm`
+- Huge display name: **Deep Ghosh** (gradient text, shimmer animation)
+- Animated typewriter subtitle cycling through:
+  - `"Computer Engineering Student"`
+  - `"AI Agent Engineer in Training"`
+  - `"React & Node.js Developer"`
+  - `"API Integration Enthusiast"`
+- Short tagline: *"Building intelligent systems at the intersection of code and AI."*
+- Two CTA buttons:
+  - Primary: **"View My Work"** → scrolls to Projects (gradient fill button)
+  - Secondary: **"Let's Connect"** → scrolls to Contact (outlined glass button)
+- Social icons row (GitHub, LinkedIn, Discord, Email) with glow hover effect
+
+**Right side:**
+- Circular profile photo of Deep Ghosh
+- Photo has animated rotating gradient ring border (cyan → purple)
+- Subtle floating animation (up-down, slow)
+- Background glow blob behind photo
+
+**Background:**
+- Animated particle network (tsParticles or canvas dots)
+- 2-3 large blurred gradient orbs slowly drifting
+
+---
+
+### 3. ABOUT SECTION
+
+**Layout:** Two columns — text left, stats/highlights right
+
+**Heading:** `About Me` with gradient underline
+
+**Bio text (use exactly this):**
+> I'm **Deep Ghosh**, a Computer Engineering student with a deep passion for Artificial Intelligence and agent-based systems. I'm actively learning **AI Agent Engineering** — building autonomous systems that think, plan, and act.
+>
+> Beyond the fundamentals of web development, I've immersed myself in the AI ecosystem — experimenting with large language model APIs, building agentic workflows, and exploring the frontier of what's possible when code meets intelligence.
+>
+> I believe the next generation of software will be **AI-native**, and I'm positioning myself right at that intersection.
+
+**Right column — Highlight cards (glassmorphism small cards):**
+- 🤖 AI Tools Power User: ChatGPT, Claude, Gemini, Perplexity
+- 🔌 API Experience: OpenAI API, Gemini API, Mistral API, Anthropic API
+- 🎓 Currently: Computer Engineering + AI Agent Engineering
+- 📍 Location: West Bengal, India
+- ⚡ Focus: LLM Applications, Agentic AI, Full-Stack Dev
+
+---
+
+### 4. SKILLS SECTION
+
+**Heading:** `Tech Stack & Skills`
+
+**Layout:** Categorized grid of animated skill cards
+
+**Category 1 — Frontend Development**
+- HTML5, CSS3, JavaScript (ES6+), React.js, Vue.js (basics)
+
+**Category 2 — Backend Development**
+- Node.js, Express.js, REST APIs, Python
+
+**Category 3 — AI & LLM Engineering**
+- LangChain, LlamaIndex (basics), OpenAI API, Gemini API, Mistral API, Anthropic API, Prompt Engineering, RAG Architecture (learning), Agentic Workflows
+
+**Category 4 — AI Tools & Platforms**
+- ChatGPT, Claude (Anthropic), Google Gemini, Perplexity AI, Replit AI, GitHub Copilot
+
+**Category 5 — Tools & Others**
+- Git, GitHub, VS Code, Postman
+
+**Skill Tag Style:** Pill-shaped tags with gradient border, icon + name, hover glow effect. Group them by category with a category title badge.
+
+---
+
+### 5. PROJECTS SECTION
+
+**Heading:** `My Projects`
+
+**Subheading:** *"Building in public — projects coming soon"*
+
+**Layout:** 3-column responsive card grid
+
+**Show 3 placeholder project cards** with this style:
+- Card has glassmorphism design
+- Top: blurred gradient placeholder image area with a code icon
+- Badge: `🚧 Coming Soon` pulsing glow badge
+- Title: `Project Name TBA`
+- Description: *"Currently in development. Check back soon or follow my GitHub for updates."*
+- Bottom: GitHub link button (disabled state, grayed) + Live Demo button (disabled)
+
+**Below grid:**
+> A note in styled italic: *"Projects are actively being built. Follow* [**@didoghosh143**](https://github.com/didoghosh143) *on GitHub to get notified."*
+
+---
+
+### 6. CONTACT SECTION
+
+**Heading:** `Let's Build Something`
+
+**Subheading:** *"Whether it's a project collaboration, an opportunity, or just a conversation about AI — I'm always open."*
+
+**Layout:** Two columns
+
+**Left — Contact Info cards (glassmorphism):**
+
+Each card has icon + label + value with hover glow:
+
+- 📧 Email: [didoghosh143@gmail.com](mailto:didoghosh143@gmail.com)
+- 📱 Phone: [+91 7583952349](tel:+917583952349)
+- 💼 LinkedIn: [linkedin.com/in/thedido](https://www.linkedin.com/in/thedido?utm_source=share_via&utm_content=profile&utm_medium=member_android)
+- 💻 GitHub: [github.com/didoghosh143](https://github.com/didoghosh143)
+- 🎮 Discord: [discord.com/users/944944458917617755](https://discord.com/users/944944458917617755)
+
+**Right — Contact Form:**
+- Fields: Name, Email, Subject, Message (textarea)
+- All fields: glassmorphism style, glowing focus border (cyan)
+- Submit Button: Large gradient button "Send Message →" with shimmer hover animation
+- On submit: show success toast notification with animation
+
+---
+
+### 7. FOOTER
+
+- Center-aligned
+- Logo + name: `<Deep Ghosh />`
+- One-liner: *"Turning curiosity into code, one commit at a time."*
+- Social icons row (same as hero)
+- Copyright: `© 2025 Deep Ghosh. Built with passion & caffeine.`
+- Subtle gradient line separator at top
+
+---
+
+## 📱 RESPONSIVE DESIGN
+
+- **Mobile (< 768px):** Single column, hamburger nav, reduced particle count, touch-friendly tap targets
+- **Tablet (768px–1024px):** 2-column grids, adjusted font sizes
+- **Desktop (> 1024px):** Full layout as described
+- All animations should be performant — use `will-change`, `transform`, `opacity` only
+
+---
+
+## 🛠 TECHNICAL STACK
+
+- **Pure HTML, CSS, JavaScript** (no framework needed — vanilla for Replit)
+- OR **React + Vite** if you prefer component structure
+- **tsParticles** CDN for particle background
+- **Google Fonts** CDN: Space Grotesk, Inter, JetBrains Mono
+- **Font Awesome** or **Lucide Icons** CDN for icons
+- **AOS (Animate on Scroll)** CDN OR custom `IntersectionObserver` for scroll animations
+- **Typed.js** CDN for typewriter effect
+- All in a **single HTML file** or well-organized multi-file structure
+
+---
+
+## 🔗 PERSONAL DETAILS TO USE
+
+| Field | Value |
+|-------|-------|
+| Name | Deep Ghosh |
+| Email | didoghosh143@gmail.com |
+| Phone | +91 7583952349 |
+| LinkedIn | https://www.linkedin.com/in/thedido |
+| GitHub | https://github.com/didoghosh143 |
+| Discord | https://discord.com/users/944944458917617755 |
+| Location | West Bengal, India |
+| Role | Computer Engineering Student & AI Agent Engineer |
+
+---
+
+## ⚠️ IMPORTANT INSTRUCTIONS FOR REPLIT AI
+
+1. **DO NOT use any template or boilerplate** — build this from scratch following the exact design system above
+2. **Profile photo:** Leave an `<img>` tag with `id="profile-photo"` and `src="./photo.jpg"` — I will upload the photo manually
+3. **All animations must actually work** — test scroll animations, hover effects, typewriter
+4. **Glassmorphism must be real** — use `backdrop-filter: blur()`, transparent backgrounds, gradient borders
+5. **The particle canvas must load on page open** — connect dots animation in hero
+6. **Custom cursor must work** on desktop screens
+7. **Mobile responsive is mandatory** — test all breakpoints
+8. **No placeholder lorem ipsum** — use the exact bio and content provided above
+9. Make the overall vibe: **dark, futuristic, AI-native, premium developer portfolio**
+10. The website should feel like it belongs to someone building the future of AI
+
+---
+
+*End of prompt. Paste everything above into Replit AI.*
