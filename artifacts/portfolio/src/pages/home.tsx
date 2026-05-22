@@ -4,8 +4,7 @@ import { TypeAnimation } from "react-type-animation";
 import { Terminal, Mail, Linkedin, MessageCircle } from "lucide-react";
 import { SiGithub, SiDiscord } from "react-icons/si";
 import { useToast } from "@/hooks/use-toast";
-import video1 from "@assets/Recording_2026-05-22_080027_1779417056504.mp4";
-import video2 from "@assets/screen-20260522-071558_1779417061524.mp4";
+
 
 const SOCIAL_LINKS = {
   github: "https://github.com/didoghosh143",
@@ -393,34 +392,6 @@ export default function Home() {
           <p className="font-mono text-xs text-white/40 mt-8 text-center">Projects are actively being built. Follow @didoghosh143 on GitHub.</p>
         </section>
 
-        {/* SECTION 6 - Work Videos */}
-        <section id="work" className="max-w-7xl mx-auto px-6 w-full">
-          <div className="mb-12">
-            <h2 className="font-mono text-2xl md:text-3xl font-bold uppercase tracking-wide">
-              <span className="text-[#00d4ff] mr-2">//</span>Visual Logs
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="glass-card rounded-xl overflow-hidden flex flex-col">
-              <div className="bg-white/5 border-b border-white/10 px-4 py-3 flex items-center gap-2">
-                <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-                <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-                <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-                <span className="ml-4 font-mono text-[10px] text-white/40 uppercase tracking-widest">demo_01.mp4</span>
-              </div>
-              <video src={video1} controls className="w-full aspect-video object-cover" />
-            </div>
-            <div className="glass-card rounded-xl overflow-hidden flex flex-col">
-              <div className="bg-white/5 border-b border-white/10 px-4 py-3 flex items-center gap-2">
-                <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-                <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-                <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-                <span className="ml-4 font-mono text-[10px] text-white/40 uppercase tracking-widest">demo_02.mp4</span>
-              </div>
-              <video src={video2} controls className="w-full aspect-video object-cover" />
-            </div>
-          </div>
-        </section>
 
         {/* SECTION 7 - Contact */}
         <section id="contact" className="max-w-7xl mx-auto px-6 w-full">
@@ -434,7 +405,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12">
             <div className="flex flex-col gap-4">
               <a href={SOCIAL_LINKS.email} className="glass-card p-6 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group">
-                <Mail className="text-[#00d4ff]" />
+                <Mail className="text-white/40" />
                 <div>
                   <div className="text-xs text-white/40 uppercase tracking-widest font-bold">Email</div>
                   <div className="text-white font-mono group-hover:text-[#00d4ff] transition-colors">didoghosh143@gmail.com</div>
@@ -448,21 +419,21 @@ export default function Home() {
                 </div>
               </a>
               <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noreferrer" className="glass-card p-6 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group">
-                <Linkedin className="text-[#00d4ff]" size={24} />
+                <Linkedin className="text-white/40" size={24} />
                 <div>
                   <div className="text-xs text-white/40 uppercase tracking-widest font-bold">LinkedIn</div>
                   <div className="text-white font-mono group-hover:text-[#00d4ff] transition-colors">linkedin.com/in/thedido</div>
                 </div>
               </a>
               <a href={SOCIAL_LINKS.github} target="_blank" rel="noreferrer" className="glass-card p-6 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group">
-                <SiGithub className="text-[#00d4ff]" size={24} />
+                <SiGithub className="text-white/40" size={24} />
                 <div>
                   <div className="text-xs text-white/40 uppercase tracking-widest font-bold">GitHub</div>
                   <div className="text-white font-mono group-hover:text-[#00d4ff] transition-colors">github.com/didoghosh143</div>
                 </div>
               </a>
               <a href={SOCIAL_LINKS.discord} target="_blank" rel="noreferrer" className="glass-card p-6 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group">
-                <SiDiscord className="text-[#00d4ff]" size={24} />
+                <SiDiscord className="text-white/40" size={24} />
                 <div>
                   <div className="text-xs text-white/40 uppercase tracking-widest font-bold">Discord</div>
                   <div className="text-white font-mono group-hover:text-[#00d4ff] transition-colors">discord.com/users/944944458917617755</div>
