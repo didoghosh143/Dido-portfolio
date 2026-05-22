@@ -189,7 +189,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 className="font-['Space_Grotesk'] text-6xl md:text-8xl lg:text-9xl font-black uppercase leading-none tracking-tighter"
               >
-                <span className="gradient-text animate-shimmer inline-block w-full">Deep Ghosh</span>
+                <span className="text-white inline-block w-full" style={{textShadow: '0 0 40px rgba(255,255,255,0.15)'}}>Deep Ghosh</span>
               </motion.h1>
 
               <div className="h-8 md:h-10">
