@@ -152,8 +152,9 @@ export default function Home() {
       {/* SECTION 1 - Navbar */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-black/80 backdrop-blur-md border-b border-[#7b2ff7]/20 py-3' : 'bg-transparent py-5'}`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <div className="font-['JetBrains_Mono'] text-xl font-bold gradient-text cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} data-testid="nav-logo">
-            &lt;DG /&gt;
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} data-testid="nav-logo">
+            <img src={profilePhoto} alt="Deep Ghosh" className="w-8 h-8 rounded-full object-cover ring-2 ring-[#7b2ff7]/60" />
+            <span className="font-['Space_Grotesk'] text-base font-bold text-white tracking-wide">Deep Ghosh</span>
           </div>
           <div className="hidden md:flex items-center gap-8 font-mono text-xs uppercase tracking-widest text-white/70">
             <button onClick={() => scrollTo('about')} className="hover:text-[#7b2ff7] transition-colors" data-testid="nav-about">About</button>
@@ -176,6 +177,23 @@ export default function Home() {
         <section className="min-h-screen flex items-center pt-20">
           <div className="max-w-7xl mx-auto px-6 w-full flex flex-col md:flex-row items-center gap-12">
             <div className="w-full md:w-[60%] flex flex-col items-start gap-6">
+              {/* Mobile-only profile photo */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6 }}
+                className="flex md:hidden self-center relative mb-2"
+              >
+                <div className="absolute inset-0 rounded-full blur-xl opacity-60" style={{ background: 'radial-gradient(circle, rgba(123,47,247,0.7) 0%, transparent 70%)' }} />
+                <div className="relative w-28 h-28 rounded-full p-[3px]" style={{ background: 'conic-gradient(from 0deg, #7b2ff7, #a855f7, #c084fc, transparent, #7b2ff7)', animation: 'rotate-ring 6s linear infinite' }}>
+                  <img
+                    src={profilePhoto}
+                    alt="Deep Ghosh"
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                </div>
+              </motion.div>
+
               <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -441,39 +459,39 @@ export default function Home() {
 
           <div className="grid lg:grid-cols-2 gap-12">
             <div className="flex flex-col gap-4">
-              <a href={SOCIAL_LINKS.email} className="glass-card p-6 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group">
-                <Mail className="text-white/40" />
-                <div>
+              <a href={SOCIAL_LINKS.email} className="glass-card p-4 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group overflow-hidden">
+                <Mail className="text-white/40 shrink-0" />
+                <div className="min-w-0">
                   <div className="text-xs text-white/40 uppercase tracking-widest font-bold">Email</div>
-                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors">didoghosh143@gmail.com</div>
+                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors truncate">didoghosh143@gmail.com</div>
                 </div>
               </a>
-              <a href={SOCIAL_LINKS.phone} className="glass-card p-6 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group">
-                <div className="text-[#7b2ff7] font-bold">📞</div>
-                <div>
+              <a href={SOCIAL_LINKS.phone} className="glass-card p-4 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group overflow-hidden">
+                <span className="text-white/40 shrink-0 text-lg">📞</span>
+                <div className="min-w-0">
                   <div className="text-xs text-white/40 uppercase tracking-widest font-bold">Phone</div>
-                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors">+91 7583952349</div>
+                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors truncate">+91 7583952349</div>
                 </div>
               </a>
-              <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noreferrer" className="glass-card p-6 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group">
-                <Linkedin className="text-white/40" size={24} />
-                <div>
+              <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noreferrer" className="glass-card p-4 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group overflow-hidden">
+                <Linkedin className="text-white/40 shrink-0" size={24} />
+                <div className="min-w-0">
                   <div className="text-xs text-white/40 uppercase tracking-widest font-bold">LinkedIn</div>
-                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors">linkedin.com/in/thedido</div>
+                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors truncate">linkedin.com/in/thedido</div>
                 </div>
               </a>
-              <a href={SOCIAL_LINKS.github} target="_blank" rel="noreferrer" className="glass-card p-6 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group">
-                <SiGithub className="text-white/40" size={24} />
-                <div>
+              <a href={SOCIAL_LINKS.github} target="_blank" rel="noreferrer" className="glass-card p-4 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group overflow-hidden">
+                <SiGithub className="text-white/40 shrink-0" size={24} />
+                <div className="min-w-0">
                   <div className="text-xs text-white/40 uppercase tracking-widest font-bold">GitHub</div>
-                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors">github.com/didoghosh143</div>
+                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors truncate">github.com/didoghosh143</div>
                 </div>
               </a>
-              <a href={SOCIAL_LINKS.discord} target="_blank" rel="noreferrer" className="glass-card p-6 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group">
-                <SiDiscord className="text-white/40" size={24} />
-                <div>
+              <a href={SOCIAL_LINKS.discord} target="_blank" rel="noreferrer" className="glass-card p-4 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group overflow-hidden">
+                <SiDiscord className="text-white/40 shrink-0" size={24} />
+                <div className="min-w-0">
                   <div className="text-xs text-white/40 uppercase tracking-widest font-bold">Discord</div>
-                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors">discord.com/users/944944458917617755</div>
+                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors truncate">discord.com/users/944944458917617755</div>
                 </div>
               </a>
             </div>
