@@ -177,27 +177,30 @@ export default function Home() {
         <section className="min-h-screen flex items-center pt-20">
           <div className="max-w-7xl mx-auto px-6 w-full flex flex-col md:flex-row items-center gap-12">
             <div className="w-full md:w-[60%] flex flex-col items-start gap-6">
-              {/* Mobile-only profile photo */}
+              {/* Mobile-only: photo + badge row */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6 }}
-                className="flex md:hidden self-center relative mb-2"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="flex md:hidden items-center gap-3"
               >
-                <div className="absolute inset-0 rounded-full blur-xl opacity-60" style={{ background: 'radial-gradient(circle, rgba(123,47,247,0.7) 0%, transparent 70%)' }} />
-                <div className="relative w-28 h-28 rounded-full p-[3px]" style={{ background: 'conic-gradient(from 0deg, #7b2ff7, #a855f7, #c084fc, transparent, #7b2ff7)', animation: 'rotate-ring 6s linear infinite' }}>
-                  <img
-                    src={profilePhoto}
-                    alt="Deep Ghosh"
-                    className="w-full h-full rounded-full object-cover"
-                  />
+                <img
+                  src={profilePhoto}
+                  alt="Deep Ghosh"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-[#7b2ff7]/60"
+                  style={{ boxShadow: '0 0 14px rgba(123,47,247,0.4)' }}
+                />
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
+                  <span className="w-2 h-2 rounded-full bg-[#7b2ff7] animate-pulse" />
+                  <span className="font-mono text-xs text-white/80">👋 Hello, I'm</span>
                 </div>
               </motion.div>
 
+              {/* Desktop-only badge */}
               <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm"
+                className="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm"
               >
                 <span className="w-2 h-2 rounded-full bg-[#7b2ff7] animate-pulse" />
                 <span className="font-mono text-xs text-white/80">👋 Hello, I'm</span>
@@ -449,51 +452,40 @@ export default function Home() {
 
 
         {/* SECTION 7 - Contact */}
-        <section id="contact" className="max-w-7xl mx-auto px-6 w-full">
-          <div className="mb-12">
-            <h2 className="font-mono text-2xl md:text-3xl font-bold uppercase tracking-wide">
+        <section id="contact" className="w-full overflow-x-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="mb-10">
+            <h2 className="font-mono text-xl md:text-3xl font-bold uppercase tracking-wide">
               <span className="text-[#7b2ff7] mr-2">//</span>Let's Build Something
             </h2>
-            <p className="text-white/60 font-mono text-sm mt-4 max-w-2xl">Whether it's a project collaboration, an opportunity, or just a conversation about AI — I'm always open.</p>
+            <p className="text-white/60 font-mono text-xs md:text-sm mt-3 max-w-2xl">Whether it's a collaboration, opportunity, or just a chat about AI — I'm always open.</p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div className="flex flex-col gap-4">
-              <a href={SOCIAL_LINKS.email} className="glass-card p-4 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group overflow-hidden">
-                <Mail className="text-white/40 shrink-0" />
-                <div className="min-w-0">
-                  <div className="text-xs text-white/40 uppercase tracking-widest font-bold">Email</div>
-                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors truncate">didoghosh143@gmail.com</div>
-                </div>
-              </a>
-              <a href={SOCIAL_LINKS.phone} className="glass-card p-4 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group overflow-hidden">
-                <span className="text-white/40 shrink-0 text-lg">📞</span>
-                <div className="min-w-0">
-                  <div className="text-xs text-white/40 uppercase tracking-widest font-bold">Phone</div>
-                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors truncate">+91 7583952349</div>
-                </div>
-              </a>
-              <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noreferrer" className="glass-card p-4 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group overflow-hidden">
-                <Linkedin className="text-white/40 shrink-0" size={24} />
-                <div className="min-w-0">
-                  <div className="text-xs text-white/40 uppercase tracking-widest font-bold">LinkedIn</div>
-                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors truncate">linkedin.com/in/thedido</div>
-                </div>
-              </a>
-              <a href={SOCIAL_LINKS.github} target="_blank" rel="noreferrer" className="glass-card p-4 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group overflow-hidden">
-                <SiGithub className="text-white/40 shrink-0" size={24} />
-                <div className="min-w-0">
-                  <div className="text-xs text-white/40 uppercase tracking-widest font-bold">GitHub</div>
-                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors truncate">github.com/didoghosh143</div>
-                </div>
-              </a>
-              <a href={SOCIAL_LINKS.discord} target="_blank" rel="noreferrer" className="glass-card p-4 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group overflow-hidden">
-                <SiDiscord className="text-white/40 shrink-0" size={24} />
-                <div className="min-w-0">
-                  <div className="text-xs text-white/40 uppercase tracking-widest font-bold">Discord</div>
-                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors truncate">discord.com/users/944944458917617755</div>
-                </div>
-              </a>
+          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8">
+            {/* Contact cards — 2-col grid on mobile, single items on desktop */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 w-full">
+              {[
+                { href: SOCIAL_LINKS.email, icon: <Mail size={18} className="text-white/50 shrink-0" />, label: 'Email', value: 'didoghosh143@gmail.com' },
+                { href: SOCIAL_LINKS.phone, icon: <span className="text-white/50 shrink-0 text-base leading-none">📞</span>, label: 'Phone', value: '+91 7583952349' },
+                { href: SOCIAL_LINKS.linkedin, target: '_blank', icon: <Linkedin size={18} className="text-white/50 shrink-0" />, label: 'LinkedIn', value: 'linkedin.com/in/thedido' },
+                { href: SOCIAL_LINKS.github, target: '_blank', icon: <SiGithub size={18} className="text-white/50 shrink-0" />, label: 'GitHub', value: 'github.com/didoghosh143' },
+                { href: SOCIAL_LINKS.discord, target: '_blank', icon: <SiDiscord size={18} className="text-white/50 shrink-0" />, label: 'Discord', value: '@didoghosh143' },
+              ].map(({ href, icon, label, value, target }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target={target}
+                  rel={target ? 'noreferrer' : undefined}
+                  className="glass-card w-full rounded-xl p-3 flex items-center gap-3 hover:glow-cyan transition-all group"
+                  data-testid={`contact-${label.toLowerCase()}`}
+                >
+                  {icon}
+                  <div className="min-w-0 flex-1 overflow-hidden">
+                    <div className="text-[10px] text-white/40 uppercase tracking-widest font-bold leading-none mb-1">{label}</div>
+                    <div className="text-white text-xs font-mono group-hover:text-[#7b2ff7] transition-colors truncate">{value}</div>
+                  </div>
+                </a>
+              ))}
             </div>
 
             <form onSubmit={handleContactSubmit} className="glass-card p-8 rounded-xl flex flex-col gap-6">
@@ -517,6 +509,7 @@ export default function Home() {
                 Send Message →
               </button>
             </form>
+          </div>
           </div>
         </section>
       </main>
