@@ -341,7 +341,7 @@
 .animate-orb { animation: orb-drift 15s ease-in-out infinite; }
 .animate-shimmer { background: linear-gradient(90deg, #ffffff00 0%, #ffffff40 50%, #ffffff00 100%); background-size: 200% auto; animation: shimmer 3s linear infinite; }
 .cursor-blink { animation: cursor-blink 1s step-end infinite; }
-.gradient-text { background: linear-gradient(135deg, #00d4ff, #7b2ff7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.glass-card { background: rgba(255,255,255,0.04); backdrop-filter: blur(20px); border: 1px solid rgba(0,212,255,0.15); }
-.glow-cyan { box-shadow: 0 0 20px rgba(0,212,255,0.3), 0 0 40px rgba(0,212,255,0.1); }
-.glow-cyan-text { text-shadow: 0 0 20px rgba(0,212,255,0.5); }
+.gradient-text { background: linear-gradient(135deg, #7b2ff7, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.glass-card { background: rgba(255,255,255,0.04); backdrop-filter: blur(20px); border: 1px solid rgba(123,47,247,0.2); }
+.glow-cyan { box-shadow: 0 0 20px rgba(123,47,247,0.4), 0 0 40px rgba(123,47,247,0.15); }
+.glow-cyan-text { text-shadow: 0 0 20px rgba(123,47,247,0.6); }

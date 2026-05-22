@@ -47,7 +47,7 @@ function ParticleCanvas() {
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "rgba(0, 212, 255, 0.5)";
+      ctx.fillStyle = "rgba(123, 47, 247, 0.5)";
       ctx.lineWidth = 0.5;
 
       for (let i = 0; i < particles.length; i++) {
@@ -70,7 +70,7 @@ function ParticleCanvas() {
 
           if (dist < 150) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(0, 212, 255, ${0.2 * (1 - dist / 150)})`;
+            ctx.strokeStyle = `rgba(123, 47, 247, ${0.3 * (1 - dist / 150)})`;
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.stroke();
@@ -136,33 +136,33 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans selection:bg-[#00d4ff] selection:text-black relative overflow-x-hidden">
+    <div className="min-h-screen bg-black text-white font-sans selection:bg-[#7b2ff7] selection:text-black relative overflow-x-hidden">
       {/* SECTION 0 - Animated Background */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-[-100px] left-[-100px] w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(0,212,255,0.15)_0%,rgba(0,0,0,0)_70%)] animate-orb blur-3xl" style={{ animationDelay: '0s' }} />
+        <div className="absolute top-[-100px] left-[-100px] w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(123,47,247,0.2)_0%,rgba(0,0,0,0)_70%)] animate-orb blur-3xl" style={{ animationDelay: '0s' }} />
         <div className="absolute bottom-[-100px] right-[-100px] w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(123,47,247,0.12)_0%,rgba(0,0,0,0)_70%)] animate-orb blur-3xl" style={{ animationDelay: '-5s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(0,212,255,0.08)_0%,rgba(123,47,247,0.08)_70%)] animate-orb blur-3xl" style={{ animationDelay: '-10s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(123,47,247,0.12)_0%,rgba(168,85,247,0.08)_70%)] animate-orb blur-3xl" style={{ animationDelay: '-10s' }} />
         
-        <div className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-[#00d4ff] to-transparent opacity-[0.03] animate-[scan-line_8s_linear_infinite]" style={{ top: '0%' }} />
+        <div className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-[#7b2ff7] to-transparent opacity-[0.03] animate-[scan-line_8s_linear_infinite]" style={{ top: '0%' }} />
       </div>
 
       <ParticleCanvas />
 
       {/* SECTION 1 - Navbar */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-black/80 backdrop-blur-md border-b border-[#00d4ff]/20 py-3' : 'bg-transparent py-5'}`}>
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-black/80 backdrop-blur-md border-b border-[#7b2ff7]/20 py-3' : 'bg-transparent py-5'}`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <div className="font-['JetBrains_Mono'] text-xl font-bold gradient-text cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} data-testid="nav-logo">
             &lt;DG /&gt;
           </div>
           <div className="hidden md:flex items-center gap-8 font-mono text-xs uppercase tracking-widest text-white/70">
-            <button onClick={() => scrollTo('about')} className="hover:text-[#00d4ff] transition-colors" data-testid="nav-about">About</button>
-            <button onClick={() => scrollTo('skills')} className="hover:text-[#00d4ff] transition-colors" data-testid="nav-skills">Skills</button>
-            <button onClick={() => scrollTo('projects')} className="hover:text-[#00d4ff] transition-colors" data-testid="nav-projects">Projects</button>
-            <button onClick={() => scrollTo('contact')} className="hover:text-[#00d4ff] transition-colors" data-testid="nav-contact">Contact</button>
+            <button onClick={() => scrollTo('about')} className="hover:text-[#7b2ff7] transition-colors" data-testid="nav-about">About</button>
+            <button onClick={() => scrollTo('skills')} className="hover:text-[#7b2ff7] transition-colors" data-testid="nav-skills">Skills</button>
+            <button onClick={() => scrollTo('projects')} className="hover:text-[#7b2ff7] transition-colors" data-testid="nav-projects">Projects</button>
+            <button onClick={() => scrollTo('contact')} className="hover:text-[#7b2ff7] transition-colors" data-testid="nav-contact">Contact</button>
           </div>
           <button 
             onClick={() => scrollTo('contact')}
-            className="hidden md:block px-5 py-2 font-mono text-xs uppercase tracking-widest text-[#00d4ff] border border-[#00d4ff]/50 rounded hover:bg-[#00d4ff]/10 hover:glow-cyan transition-all"
+            className="hidden md:block px-5 py-2 font-mono text-xs uppercase tracking-widest text-[#7b2ff7] border border-[#7b2ff7]/50 rounded hover:bg-[#7b2ff7]/10 hover:glow-cyan transition-all"
             data-testid="nav-hire"
           >
             Hire Me
@@ -180,7 +180,7 @@ export default function Home() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm"
               >
-                <span className="w-2 h-2 rounded-full bg-[#00d4ff] animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-[#7b2ff7] animate-pulse" />
                 <span className="font-mono text-xs text-white/80">👋 Hello, I'm</span>
               </motion.div>
               
@@ -202,7 +202,7 @@ export default function Home() {
                   ]}
                   wrapper="div"
                   speed={50}
-                  className="font-mono text-xl md:text-2xl text-[#00d4ff]"
+                  className="font-mono text-xl md:text-2xl text-[#7b2ff7]"
                   repeat={Infinity}
                   cursor={true}
                 />
@@ -225,14 +225,14 @@ export default function Home() {
               >
                 <button 
                   onClick={() => scrollTo('projects')}
-                  className="px-8 py-3 rounded bg-gradient-to-r from-[#00d4ff] to-[#7b2ff7] text-white font-mono text-sm font-bold uppercase tracking-wide hover:opacity-90 transition-opacity"
+                  className="px-8 py-3 rounded bg-gradient-to-r from-[#7b2ff7] to-[#7b2ff7] text-white font-mono text-sm font-bold uppercase tracking-wide hover:opacity-90 transition-opacity"
                   data-testid="btn-view-work"
                 >
                   View My Work
                 </button>
                 <button 
                   onClick={() => scrollTo('contact')}
-                  className="px-8 py-3 rounded glass-card border-[#00d4ff]/50 font-mono text-sm font-bold uppercase tracking-wide text-white hover:bg-[#00d4ff]/10 hover:glow-cyan transition-all"
+                  className="px-8 py-3 rounded glass-card border-[#7b2ff7]/50 font-mono text-sm font-bold uppercase tracking-wide text-white hover:bg-[#7b2ff7]/10 hover:glow-cyan transition-all"
                   data-testid="btn-connect"
                 >
                   Let's Connect
@@ -245,16 +245,16 @@ export default function Home() {
                 transition={{ delay: 0.8 }}
                 className="flex items-center gap-6 mt-8"
               >
-                <a href={SOCIAL_LINKS.github} target="_blank" rel="noreferrer" className="text-white/50 hover:text-[#00d4ff] hover:glow-cyan-text transition-all" data-testid="social-github"><SiGithub size={24} /></a>
-                <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noreferrer" className="text-white/50 hover:text-[#00d4ff] hover:glow-cyan-text transition-all" data-testid="social-linkedin"><Linkedin size={24} /></a>
-                <a href={SOCIAL_LINKS.discord} target="_blank" rel="noreferrer" className="text-white/50 hover:text-[#00d4ff] hover:glow-cyan-text transition-all" data-testid="social-discord"><SiDiscord size={24} /></a>
-                <a href={SOCIAL_LINKS.email} className="text-white/50 hover:text-[#00d4ff] hover:glow-cyan-text transition-all" data-testid="social-email"><Mail size={24} /></a>
+                <a href={SOCIAL_LINKS.github} target="_blank" rel="noreferrer" className="text-white/50 hover:text-[#7b2ff7] hover:glow-cyan-text transition-all" data-testid="social-github"><SiGithub size={24} /></a>
+                <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noreferrer" className="text-white/50 hover:text-[#7b2ff7] hover:glow-cyan-text transition-all" data-testid="social-linkedin"><Linkedin size={24} /></a>
+                <a href={SOCIAL_LINKS.discord} target="_blank" rel="noreferrer" className="text-white/50 hover:text-[#7b2ff7] hover:glow-cyan-text transition-all" data-testid="social-discord"><SiDiscord size={24} /></a>
+                <a href={SOCIAL_LINKS.email} className="text-white/50 hover:text-[#7b2ff7] hover:glow-cyan-text transition-all" data-testid="social-email"><Mail size={24} /></a>
               </motion.div>
             </div>
 
             <div className="hidden md:flex w-[40%] justify-center items-center relative">
-              <div className="absolute w-[400px] h-[400px] rounded-full border-2 border-transparent bg-[linear-gradient(135deg,#00d4ff,#7b2ff7)] [mask-image:linear-gradient(white,white),linear-gradient(white,white)] [mask-clip:padding-box,border-box] [mask-composite:exclude] p-[2px] animate-[rotate-ring_20s_linear_infinite]" />
-              <div className="absolute w-[250px] h-[250px] bg-[radial-gradient(circle,rgba(0,212,255,0.4)_0%,rgba(0,0,0,0)_70%)] blur-2xl z-0" />
+              <div className="absolute w-[400px] h-[400px] rounded-full border-2 border-transparent bg-[linear-gradient(135deg,#7b2ff7,#7b2ff7)] [mask-image:linear-gradient(white,white),linear-gradient(white,white)] [mask-clip:padding-box,border-box] [mask-composite:exclude] p-[2px] animate-[rotate-ring_20s_linear_infinite]" />
+              <div className="absolute w-[250px] h-[250px] bg-[radial-gradient(circle,rgba(123,47,247,0.4)_0%,rgba(0,0,0,0)_70%)] blur-2xl z-0" />
               <div className="font-['JetBrains_Mono'] text-9xl font-black gradient-text animate-float z-10 select-none">
                 DG
               </div>
@@ -279,7 +279,7 @@ export default function Home() {
                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
                 <span className="ml-4 font-mono text-xs text-white/40">~/about.md</span>
               </div>
-              <div className="p-6 font-mono text-sm leading-relaxed text-[#00d4ff]/80">
+              <div className="p-6 font-mono text-sm leading-relaxed text-[#7b2ff7]/80">
                 <p className="mb-2"><span className="text-white/40">&gt;</span> whoami</p>
                 <p className="text-white mb-6">Deep Ghosh — Computer Engineering student, AI Agent Engineer</p>
                 
@@ -316,8 +316,8 @@ export default function Home() {
         <section id="skills" className="max-w-7xl mx-auto px-6 w-full">
           <div className="mb-12">
             <h2 className="font-mono text-2xl md:text-3xl font-bold uppercase tracking-wide inline-block relative group">
-              <span className="text-[#00d4ff] mr-2">//</span>Tech Stack & Skills
-              <div className="absolute -bottom-2 left-0 w-full h-[2px] bg-gradient-to-r from-[#00d4ff] to-[#7b2ff7] transform origin-left transition-transform duration-300" />
+              <span className="text-[#7b2ff7] mr-2">//</span>Tech Stack & Skills
+              <div className="absolute -bottom-2 left-0 w-full h-[2px] bg-gradient-to-r from-[#7b2ff7] to-[#7b2ff7] transform origin-left transition-transform duration-300" />
             </h2>
           </div>
 
@@ -343,7 +343,7 @@ export default function Home() {
                   {cat.skills.map(skill => (
                     <span 
                       key={skill} 
-                      className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5 font-['JetBrains_Mono'] text-xs text-white/80 hover:border-[#00d4ff] hover:text-[#00d4ff] hover:bg-[#00d4ff]/10 hover:glow-cyan transition-all cursor-default"
+                      className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5 font-['JetBrains_Mono'] text-xs text-white/80 hover:border-[#7b2ff7] hover:text-[#7b2ff7] hover:bg-[#7b2ff7]/10 hover:glow-cyan transition-all cursor-default"
                     >
                       {skill}
                     </span>
@@ -358,7 +358,7 @@ export default function Home() {
         <section id="projects" className="max-w-7xl mx-auto px-6 w-full">
           <div className="mb-12">
             <h2 className="font-mono text-2xl md:text-3xl font-bold uppercase tracking-wide">
-              <span className="text-[#00d4ff] mr-2">//</span>My Projects
+              <span className="text-[#7b2ff7] mr-2">//</span>My Projects
             </h2>
             <p className="text-white/50 font-mono text-sm mt-4">Building in public — projects coming soon</p>
           </div>
@@ -373,8 +373,8 @@ export default function Home() {
             {[1, 2, 3].map(i => (
               <motion.div key={i} variants={itemVariants} className="glass-card rounded-xl overflow-hidden group">
                 <div className="h-48 relative bg-gradient-to-br from-black to-white/5 flex items-center justify-center border-b border-white/10">
-                  <Terminal size={48} className="text-white/20 group-hover:text-[#00d4ff]/50 transition-colors" />
-                  <div className="absolute top-4 right-4 px-2 py-1 border border-[#00d4ff] text-[#00d4ff] text-[10px] font-mono uppercase tracking-widest rounded animate-pulse bg-[#00d4ff]/10">
+                  <Terminal size={48} className="text-white/20 group-hover:text-[#7b2ff7]/50 transition-colors" />
+                  <div className="absolute top-4 right-4 px-2 py-1 border border-[#7b2ff7] text-[#7b2ff7] text-[10px] font-mono uppercase tracking-widest rounded animate-pulse bg-[#7b2ff7]/10">
                     🚧 Coming Soon
                   </div>
                 </div>
@@ -397,7 +397,7 @@ export default function Home() {
         <section id="contact" className="max-w-7xl mx-auto px-6 w-full">
           <div className="mb-12">
             <h2 className="font-mono text-2xl md:text-3xl font-bold uppercase tracking-wide">
-              <span className="text-[#00d4ff] mr-2">//</span>Let's Build Something
+              <span className="text-[#7b2ff7] mr-2">//</span>Let's Build Something
             </h2>
             <p className="text-white/60 font-mono text-sm mt-4 max-w-2xl">Whether it's a project collaboration, an opportunity, or just a conversation about AI — I'm always open.</p>
           </div>
@@ -408,35 +408,35 @@ export default function Home() {
                 <Mail className="text-white/40" />
                 <div>
                   <div className="text-xs text-white/40 uppercase tracking-widest font-bold">Email</div>
-                  <div className="text-white font-mono group-hover:text-[#00d4ff] transition-colors">didoghosh143@gmail.com</div>
+                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors">didoghosh143@gmail.com</div>
                 </div>
               </a>
               <a href={SOCIAL_LINKS.phone} className="glass-card p-6 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group">
-                <div className="text-[#00d4ff] font-bold">📞</div>
+                <div className="text-[#7b2ff7] font-bold">📞</div>
                 <div>
                   <div className="text-xs text-white/40 uppercase tracking-widest font-bold">Phone</div>
-                  <div className="text-white font-mono group-hover:text-[#00d4ff] transition-colors">+91 7583952349</div>
+                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors">+91 7583952349</div>
                 </div>
               </a>
               <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noreferrer" className="glass-card p-6 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group">
                 <Linkedin className="text-white/40" size={24} />
                 <div>
                   <div className="text-xs text-white/40 uppercase tracking-widest font-bold">LinkedIn</div>
-                  <div className="text-white font-mono group-hover:text-[#00d4ff] transition-colors">linkedin.com/in/thedido</div>
+                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors">linkedin.com/in/thedido</div>
                 </div>
               </a>
               <a href={SOCIAL_LINKS.github} target="_blank" rel="noreferrer" className="glass-card p-6 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group">
                 <SiGithub className="text-white/40" size={24} />
                 <div>
                   <div className="text-xs text-white/40 uppercase tracking-widest font-bold">GitHub</div>
-                  <div className="text-white font-mono group-hover:text-[#00d4ff] transition-colors">github.com/didoghosh143</div>
+                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors">github.com/didoghosh143</div>
                 </div>
               </a>
               <a href={SOCIAL_LINKS.discord} target="_blank" rel="noreferrer" className="glass-card p-6 rounded-xl flex items-center gap-4 hover:glow-cyan hover:-translate-y-1 transition-all group">
                 <SiDiscord className="text-white/40" size={24} />
                 <div>
                   <div className="text-xs text-white/40 uppercase tracking-widest font-bold">Discord</div>
-                  <div className="text-white font-mono group-hover:text-[#00d4ff] transition-colors">discord.com/users/944944458917617755</div>
+                  <div className="text-white font-mono group-hover:text-[#7b2ff7] transition-colors">discord.com/users/944944458917617755</div>
                 </div>
               </a>
             </div>
@@ -444,21 +444,21 @@ export default function Home() {
             <form onSubmit={handleContactSubmit} className="glass-card p-8 rounded-xl flex flex-col gap-6">
               <div className="flex flex-col gap-2">
                 <label className="text-xs uppercase tracking-widest text-white/60 font-bold">Name</label>
-                <input required type="text" className="glass-card bg-transparent px-4 py-3 rounded-lg outline-none focus:border-[#00d4ff] focus:glow-cyan transition-all font-mono text-sm" placeholder="Your name" />
+                <input required type="text" className="glass-card bg-transparent px-4 py-3 rounded-lg outline-none focus:border-[#7b2ff7] focus:glow-cyan transition-all font-mono text-sm" placeholder="Your name" />
               </div>
               <div className="flex flex-col gap-2">
                 <label className="text-xs uppercase tracking-widest text-white/60 font-bold">Email</label>
-                <input required type="email" className="glass-card bg-transparent px-4 py-3 rounded-lg outline-none focus:border-[#00d4ff] focus:glow-cyan transition-all font-mono text-sm" placeholder="your@email.com" />
+                <input required type="email" className="glass-card bg-transparent px-4 py-3 rounded-lg outline-none focus:border-[#7b2ff7] focus:glow-cyan transition-all font-mono text-sm" placeholder="your@email.com" />
               </div>
               <div className="flex flex-col gap-2">
                 <label className="text-xs uppercase tracking-widest text-white/60 font-bold">Subject</label>
-                <input required type="text" className="glass-card bg-transparent px-4 py-3 rounded-lg outline-none focus:border-[#00d4ff] focus:glow-cyan transition-all font-mono text-sm" placeholder="What is this regarding?" />
+                <input required type="text" className="glass-card bg-transparent px-4 py-3 rounded-lg outline-none focus:border-[#7b2ff7] focus:glow-cyan transition-all font-mono text-sm" placeholder="What is this regarding?" />
               </div>
               <div className="flex flex-col gap-2">
                 <label className="text-xs uppercase tracking-widest text-white/60 font-bold">Message</label>
-                <textarea required rows={5} className="glass-card bg-transparent px-4 py-3 rounded-lg outline-none focus:border-[#00d4ff] focus:glow-cyan transition-all font-mono text-sm resize-none" placeholder="Hello..." />
+                <textarea required rows={5} className="glass-card bg-transparent px-4 py-3 rounded-lg outline-none focus:border-[#7b2ff7] focus:glow-cyan transition-all font-mono text-sm resize-none" placeholder="Hello..." />
               </div>
-              <button type="submit" className="w-full py-4 mt-2 rounded-lg bg-gradient-to-r from-[#00d4ff] to-[#7b2ff7] text-white font-bold uppercase tracking-widest text-sm hover:animate-shimmer bg-[length:200%_auto] transition-all">
+              <button type="submit" className="w-full py-4 mt-2 rounded-lg bg-gradient-to-r from-[#7b2ff7] to-[#7b2ff7] text-white font-bold uppercase tracking-widest text-sm hover:animate-shimmer bg-[length:200%_auto] transition-all">
                 Send Message →
               </button>
             </form>
@@ -467,8 +467,8 @@ export default function Home() {
       </main>
 
       {/* SECTION 8 - Footer */}
-      <footer className="relative border-t border-[#00d4ff]/20 bg-black/50 backdrop-blur-lg pt-16 pb-8 z-10">
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-[#00d4ff] to-[#7b2ff7] opacity-30" />
+      <footer className="relative border-t border-[#7b2ff7]/20 bg-black/50 backdrop-blur-lg pt-16 pb-8 z-10">
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-[#7b2ff7] to-[#7b2ff7] opacity-30" />
         <div className="max-w-7xl mx-auto px-6 flex flex-col items-center justify-center gap-8">
           <div className="font-['JetBrains_Mono'] text-2xl font-bold gradient-text">
             &lt;Deep Ghosh /&gt;
@@ -477,9 +477,9 @@ export default function Home() {
             Turning curiosity into code, one commit at a time.
           </p>
           <div className="flex items-center gap-6">
-            <a href={SOCIAL_LINKS.github} target="_blank" rel="noreferrer" className="text-white/40 hover:text-[#00d4ff] transition-colors"><SiGithub size={20} /></a>
-            <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noreferrer" className="text-white/40 hover:text-[#00d4ff] transition-colors"><Linkedin size={20} /></a>
-            <a href={SOCIAL_LINKS.discord} target="_blank" rel="noreferrer" className="text-white/40 hover:text-[#00d4ff] transition-colors"><SiDiscord size={20} /></a>
+            <a href={SOCIAL_LINKS.github} target="_blank" rel="noreferrer" className="text-white/40 hover:text-[#7b2ff7] transition-colors"><SiGithub size={20} /></a>
+            <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noreferrer" className="text-white/40 hover:text-[#7b2ff7] transition-colors"><Linkedin size={20} /></a>
+            <a href={SOCIAL_LINKS.discord} target="_blank" rel="noreferrer" className="text-white/40 hover:text-[#7b2ff7] transition-colors"><SiDiscord size={20} /></a>
           </div>
           <div className="font-mono text-xs text-white/30 tracking-widest mt-8">
             © 2026 Deep Ghosh. Built with passion & caffeine.
