@@ -167,7 +167,7 @@ export default function Home() {
               <button
                 key={id}
                 onClick={() => scrollTo(id)}
-                className={`relative transition-colors duration-200 after:absolute after:left-0 after:-bottom-1 after:h-px after:bg-[#7b2ff7] after:transition-all after:duration-300 ${
+                className={`relative transition-colors duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-px after:bg-[#7b2ff7] after:transition-all after:duration-300 ${
                   activeSection === id
                     ? "text-[#7b2ff7] after:w-full"
                     : "text-white/55 hover:text-white after:w-0 hover:after:w-full"
@@ -327,15 +327,27 @@ export default function Home() {
               <div className="absolute w-[300px] h-[300px] rounded-full blur-3xl opacity-50"
                 style={{ background: "radial-gradient(circle, rgba(123,47,247,0.7) 0%, transparent 70%)" }} />
               {[...Array(6)].map((_, i) => (
-                <div key={i}
-                  className="absolute w-1.5 h-1.5 rounded-full bg-[#a855f7]"
+                <div
+                  key={i}
+                  className="absolute"
                   style={{
-                    left: "50%", top: "50%",
+                    left: "50%",
+                    top: "50%",
+                    width: 0,
+                    height: 0,
                     animation: `rotate-ring ${7 + i * 0.5}s linear infinite`,
-                    transform: `rotate(${i * 60}deg) translateX(210px) translateY(-3px)`,
-                    boxShadow: "0 0 6px #a855f7, 0 0 12px #7b2ff7",
+                    animationDelay: `${-(i * (7 + i * 0.5)) / 6}s`,
                   }}
-                />
+                >
+                  <div
+                    className="absolute w-1.5 h-1.5 rounded-full bg-[#a855f7]"
+                    style={{
+                      top: "-3px",
+                      left: "207px",
+                      boxShadow: "0 0 6px #a855f7, 0 0 12px #7b2ff7",
+                    }}
+                  />
+                </div>
               ))}
               <motion.div
                 animate={{ y: [0, -14, 0] }}
