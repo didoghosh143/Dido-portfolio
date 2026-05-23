@@ -23,7 +23,7 @@ function DotsBackground() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.6) 1.2px, transparent 1.2px)",
+          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.32) 1.2px, transparent 1.2px)",
           backgroundSize: "28px 28px",
           animation: "dots-drift 22s linear infinite",
         }}
