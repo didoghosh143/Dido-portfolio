@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useSpring, useMotionValue } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, useSpring, useMotionValue, useScroll, useTransform } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
 import { Terminal, Mail, Linkedin } from "lucide-react";
 import { SiGithub, SiDiscord, SiWhatsapp } from "react-icons/si";
@@ -15,72 +15,48 @@ const SOCIAL_LINKS = {
   whatsapp: "https://wa.me/917583952349"
 };
 
-/* ─── Animated Dot Grid Background ───────────────────────────────────── */
+/* ─── CSS Dot Grid — zero JS, GPU-accelerated, works on all devices ─── */
 function DotsBackground() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouse = useRef({ x: -9999, y: -9999 });
+  return (
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+      {/* Fine primary grid — drifts diagonally */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.6) 1.2px, transparent 1.2px)",
+          backgroundSize: "28px 28px",
+          animation: "dots-drift 22s linear infinite",
+        }}
+      />
+      {/* Medium accent grid — drifts opposite direction */}
+      <div
+        className="absolute inset-0 opacity-40"
+        style={{
+          backgroundImage: "radial-gradient(circle, rgba(200,185,255,0.9) 1.6px, transparent 1.6px)",
+          backgroundSize: "70px 70px",
+          backgroundPosition: "14px 14px",
+          animation: "dots-drift2 45s linear infinite",
+        }}
+      />
+      {/* Subtle overall pulse */}
+      <div
+        className="absolute inset-0"
+        style={{ animation: "dot-pulse 6s ease-in-out infinite", background: "transparent" }}
+      />
+    </div>
+  );
+}
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const SPACING = 28;
-    let cols = 0, rows = 0, raf: number, t = 0;
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      cols = Math.ceil(canvas.width / SPACING) + 1;
-      rows = Math.ceil(canvas.height / SPACING) + 1;
-    };
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      t += 0.005;
-      const { x: mx, y: my } = mouse.current;
-      const RADIUS = 150;
-
-      for (let c = 0; c < cols; c++) {
-        for (let r = 0; r < rows; r++) {
-          const x = c * SPACING;
-          const y = r * SPACING;
-          const dx = x - mx, dy = y - my;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const proximity = dist < RADIUS ? (1 - dist / RADIUS) : 0;
-          const pulse = 0.35 + 0.18 * Math.sin(t + c * 0.25 + r * 0.17);
-          const alpha = Math.min(1, pulse + proximity * 0.9);
-          const dotR = proximity > 0.05 ? 1.6 + proximity * 2.2 : 1.5;
-
-          if (proximity > 0.05) {
-            ctx.fillStyle = `rgba(220, 200, 255, ${alpha})`;
-          } else {
-            ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.65})`;
-          }
-
-          ctx.beginPath();
-          ctx.arc(x, y, dotR, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-      raf = requestAnimationFrame(draw);
-    };
-
-    const onMouse = (e: MouseEvent) => { mouse.current = { x: e.clientX, y: e.clientY }; };
-
-    window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", onMouse);
-    resize();
-    draw();
-    return () => {
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", onMouse);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
-
-  return <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none opacity-80" />;
+/* ─── Scroll progress bar ─────────────────────────────────────────────── */
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  return (
+    <motion.div
+      className="fixed top-0 left-0 right-0 h-[2px] bg-[#7b2ff7] z-[200] origin-left"
+      style={{ scaleX }}
+    />
+  );
 }
 
 /* ─── Smooth cursor glow ──────────────────────────────────────────────── */
@@ -125,11 +101,22 @@ const stagger = {
 export default function Home() {
   const { toast } = useToast();
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", fn, { passive: true });
-    return () => window.removeEventListener("scroll", fn);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 50);
+      // Active section detection
+      const sections = ["about", "skills", "projects", "contact"];
+      let current = "";
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 160) current = id;
+      }
+      setActiveSection(current);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const handleContactSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -145,18 +132,21 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-[#7b2ff7] selection:text-black relative overflow-x-hidden">
 
-      {/* ── Background layer ── */}
+      {/* ── Scroll progress bar ── */}
+      <ScrollProgress />
+
+      {/* ── Background ── */}
       <DotsBackground />
       <CursorGlow />
 
-      {/* Subtle purple gradient orb — single, very subtle */}
+      {/* Subtle purple orb */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-150px] left-[-150px] w-[700px] h-[700px] rounded-full blur-[120px] opacity-20"
+        <div className="absolute top-[-150px] left-[-150px] w-[700px] h-[700px] rounded-full blur-[120px] opacity-15"
           style={{ background: "radial-gradient(circle, rgba(123,47,247,1) 0%, transparent 70%)" }} />
       </div>
 
       {/* ── Navbar ── */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-black/70 backdrop-blur-lg border-b border-[#7b2ff7]/20 py-3" : "bg-transparent py-5"}`}>
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-black/75 backdrop-blur-xl border-b border-white/5 py-3 shadow-[0_1px_20px_rgba(0,0,0,0.5)]" : "bg-transparent py-5"}`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <div
             className="flex items-center gap-3 cursor-pointer group"
@@ -172,24 +162,30 @@ export default function Home() {
             </span>
           </div>
 
-          <div className="hidden md:flex items-center gap-8 font-mono text-xs uppercase tracking-widest text-white/60">
+          <div className="hidden md:flex items-center gap-8 font-mono text-xs uppercase tracking-widest">
             {["about", "skills", "projects", "contact"].map(id => (
               <button
                 key={id}
                 onClick={() => scrollTo(id)}
-                className="relative hover:text-white transition-colors duration-200 after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-[#7b2ff7] after:transition-all after:duration-300 hover:after:w-full"
+                className={`relative transition-colors duration-200 after:absolute after:left-0 after:-bottom-1 after:h-px after:bg-[#7b2ff7] after:transition-all after:duration-300 ${
+                  activeSection === id
+                    ? "text-[#7b2ff7] after:w-full"
+                    : "text-white/55 hover:text-white after:w-0 hover:after:w-full"
+                }`}
               >
                 {id}
               </button>
             ))}
           </div>
 
-          <button
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
             onClick={() => scrollTo("contact")}
             className="hidden md:block px-5 py-2 font-mono text-xs uppercase tracking-widest text-[#7b2ff7] border border-[#7b2ff7]/50 rounded hover:bg-[#7b2ff7] hover:text-white transition-all duration-300"
           >
             Hire Me
-          </button>
+          </motion.button>
         </div>
       </nav>
 
