@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useSpring, useMotionValue } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
 import { Terminal, Mail, Linkedin } from "lucide-react";
-import { SiGithub, SiDiscord } from "react-icons/si";
+import { SiGithub, SiDiscord, SiWhatsapp } from "react-icons/si";
 import { useToast } from "@/hooks/use-toast";
 import profilePhoto from "@assets/Untitled_(LinkedIn_Profile_Picture)_20260115_100743_0000_1779420104799.png";
 
@@ -11,7 +11,8 @@ const SOCIAL_LINKS = {
   linkedin: "https://www.linkedin.com/in/thedido",
   discord: "https://discord.com/users/944944458917617755",
   email: "mailto:didoghosh143@gmail.com",
-  phone: "tel:+917583952349"
+  phone: "tel:+917583952349",
+  whatsapp: "https://wa.me/917583952349"
 };
 
 /* ─── Animated Dot Grid Background ───────────────────────────────────── */
@@ -301,10 +302,11 @@ export default function Home() {
                 className="flex items-center gap-6 mt-6"
               >
                 {[
-                  { href: SOCIAL_LINKS.github, icon: <SiGithub size={22} />, label: "github" },
-                  { href: SOCIAL_LINKS.linkedin, icon: <Linkedin size={22} />, label: "linkedin" },
-                  { href: SOCIAL_LINKS.discord, icon: <SiDiscord size={22} />, label: "discord" },
-                  { href: SOCIAL_LINKS.email, icon: <Mail size={22} />, label: "email" },
+                  { href: SOCIAL_LINKS.github, icon: <SiGithub size={30} />, label: "github" },
+                  { href: SOCIAL_LINKS.linkedin, icon: <Linkedin size={30} />, label: "linkedin" },
+                  { href: SOCIAL_LINKS.discord, icon: <SiDiscord size={30} />, label: "discord" },
+                  { href: SOCIAL_LINKS.whatsapp, icon: <SiWhatsapp size={30} />, label: "whatsapp" },
+                  { href: SOCIAL_LINKS.email, icon: <Mail size={30} />, label: "email" },
                 ].map(({ href, icon, label }) => (
                   <motion.a
                     key={label}
@@ -532,11 +534,12 @@ export default function Home() {
                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 w-full"
               >
                 {[
-                  { href: SOCIAL_LINKS.email, icon: <Mail size={18} className="text-white/50 shrink-0" />, label: "Email", value: "didoghosh143@gmail.com" },
-                  { href: SOCIAL_LINKS.phone, icon: <span className="text-white/50 shrink-0 text-base leading-none">📞</span>, label: "Phone", value: "+91 7583952349" },
-                  { href: SOCIAL_LINKS.linkedin, target: "_blank", icon: <Linkedin size={18} className="text-white/50 shrink-0" />, label: "LinkedIn", value: "linkedin.com/in/thedido" },
-                  { href: SOCIAL_LINKS.github, target: "_blank", icon: <SiGithub size={18} className="text-white/50 shrink-0" />, label: "GitHub", value: "github.com/didoghosh143" },
-                  { href: SOCIAL_LINKS.discord, target: "_blank", icon: <SiDiscord size={18} className="text-white/50 shrink-0" />, label: "Discord", value: "@didoghosh143" },
+                  { href: SOCIAL_LINKS.email, icon: <Mail size={20} className="text-white/50 shrink-0" />, label: "Email", value: "didoghosh143@gmail.com" },
+                  { href: SOCIAL_LINKS.phone, icon: <span className="text-white/50 shrink-0 text-lg leading-none">📞</span>, label: "Phone", value: "+91 7583952349" },
+                  { href: SOCIAL_LINKS.whatsapp, target: "_blank", icon: <SiWhatsapp size={20} className="text-white/50 shrink-0" />, label: "WhatsApp", value: "wa.me/917583952349" },
+                  { href: SOCIAL_LINKS.linkedin, target: "_blank", icon: <Linkedin size={20} className="text-white/50 shrink-0" />, label: "LinkedIn", value: "linkedin.com/in/thedido" },
+                  { href: SOCIAL_LINKS.github, target: "_blank", icon: <SiGithub size={20} className="text-white/50 shrink-0" />, label: "GitHub", value: "github.com/didoghosh143" },
+                  { href: SOCIAL_LINKS.discord, target: "_blank", icon: <SiDiscord size={20} className="text-white/50 shrink-0" />, label: "Discord", value: "@didoghosh143" },
                 ].map(({ href, icon, label, value, target }) => (
                   <motion.a
                     key={label}
@@ -615,9 +618,10 @@ export default function Home() {
           </p>
           <div className="flex items-center gap-6">
             {[
-              { href: SOCIAL_LINKS.github, icon: <SiGithub size={20} /> },
-              { href: SOCIAL_LINKS.linkedin, icon: <Linkedin size={20} /> },
-              { href: SOCIAL_LINKS.discord, icon: <SiDiscord size={20} /> },
+              { href: SOCIAL_LINKS.github, icon: <SiGithub size={28} /> },
+              { href: SOCIAL_LINKS.linkedin, icon: <Linkedin size={28} /> },
+              { href: SOCIAL_LINKS.discord, icon: <SiDiscord size={28} /> },
+              { href: SOCIAL_LINKS.whatsapp, icon: <SiWhatsapp size={28} /> },
             ].map(({ href, icon }, i) => (
               <motion.a
                 key={i}
