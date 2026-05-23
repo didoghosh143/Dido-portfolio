@@ -25,7 +25,7 @@ function DotsBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const SPACING = 34;
+    const SPACING = 28;
     let cols = 0, rows = 0, raf: number, t = 0;
 
     const resize = () => {
@@ -37,9 +37,9 @@ function DotsBackground() {
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      t += 0.006;
+      t += 0.005;
       const { x: mx, y: my } = mouse.current;
-      const RADIUS = 130;
+      const RADIUS = 150;
 
       for (let c = 0; c < cols; c++) {
         for (let r = 0; r < rows; r++) {
@@ -48,14 +48,14 @@ function DotsBackground() {
           const dx = x - mx, dy = y - my;
           const dist = Math.sqrt(dx * dx + dy * dy);
           const proximity = dist < RADIUS ? (1 - dist / RADIUS) : 0;
-          const pulse = 0.18 + 0.10 * Math.sin(t + c * 0.28 + r * 0.18);
-          const alpha = Math.min(1, pulse + proximity * 0.85);
-          const dotR = proximity > 0.04 ? 1.2 + proximity * 1.8 : 1;
+          const pulse = 0.35 + 0.18 * Math.sin(t + c * 0.25 + r * 0.17);
+          const alpha = Math.min(1, pulse + proximity * 0.9);
+          const dotR = proximity > 0.05 ? 1.6 + proximity * 2.2 : 1.5;
 
-          if (proximity > 0.04) {
-            ctx.fillStyle = `rgba(168, 85, 247, ${alpha})`;
+          if (proximity > 0.05) {
+            ctx.fillStyle = `rgba(220, 200, 255, ${alpha})`;
           } else {
-            ctx.fillStyle = `rgba(200, 180, 255, ${alpha * 0.55})`;
+            ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.65})`;
           }
 
           ctx.beginPath();
@@ -201,19 +201,22 @@ export default function Home() {
             {/* Left: text */}
             <div className="w-full md:w-[58%] flex flex-col items-start gap-6">
 
-              {/* Mobile: photo + badge inline */}
+              {/* Mobile: photo centered, then badge */}
               <motion.div
                 initial={{ opacity: 0, y: -12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="flex md:hidden items-center gap-3"
+                className="flex md:hidden flex-col items-start gap-4 w-full"
               >
-                <img
-                  src={profilePhoto}
-                  alt="Deep Ghosh"
-                  className="w-12 h-12 rounded-full object-cover border-2 border-[#7b2ff7]/60"
-                  style={{ boxShadow: "0 0 14px rgba(123,47,247,0.45)" }}
-                />
+                <div className="relative self-center">
+                  <div className="absolute inset-0 rounded-full blur-xl opacity-50" style={{ background: "radial-gradient(circle, rgba(123,47,247,0.8) 0%, transparent 70%)" }} />
+                  <img
+                    src={profilePhoto}
+                    alt="Deep Ghosh"
+                    className="relative w-32 h-32 rounded-full object-cover border-2 border-[#7b2ff7]/70"
+                    style={{ boxShadow: "0 0 24px rgba(123,47,247,0.5), 0 0 48px rgba(123,47,247,0.2)" }}
+                  />
+                </div>
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
                   <span className="w-2 h-2 rounded-full bg-[#7b2ff7] animate-pulse" />
                   <span className="font-mono text-xs text-white/80">👋 Hello, I'm</span>
@@ -603,7 +606,10 @@ export default function Home() {
       {/* ── Footer ── */}
       <footer className="relative border-t border-[#7b2ff7]/20 bg-black/60 backdrop-blur-lg pt-14 pb-8 z-10">
         <div className="max-w-7xl mx-auto px-6 flex flex-col items-center gap-6">
-          <div className="font-['JetBrains_Mono'] text-xl font-bold gradient-text">&lt;Deep Ghosh /&gt;</div>
+          <div className="flex flex-col items-center gap-1">
+            <span className="font-['Space_Grotesk'] text-2xl font-black uppercase tracking-[0.15em] text-white">Deep Ghosh</span>
+            <div className="h-[2px] w-12 rounded-full bg-[#7b2ff7]" />
+          </div>
           <p className="font-mono text-sm text-white/45 text-center max-w-xs">
             Turning curiosity into code, one commit at a time.
           </p>
