@@ -88,6 +88,67 @@ function CursorGlow() {
   );
 }
 
+/* ─── Sticky floating dock ────────────────────────────────────────────── */
+function StickyDock({ onScrollTo }: { onScrollTo: (id: string) => void }) {
+  const dockItems = [
+    { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>, label: "Home", action: () => window.scrollTo({ top: 0, behavior: "smooth" }) },
+    { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>, label: "About", action: () => onScrollTo("about") },
+    "divider",
+    { icon: <SiGithub size={18} />, label: "GitHub", href: SOCIAL_LINKS.github },
+    { icon: <Linkedin size={18} />, label: "LinkedIn", href: SOCIAL_LINKS.linkedin },
+    { icon: <SiDiscord size={18} />, label: "Discord", href: SOCIAL_LINKS.discord },
+    { icon: <SiWhatsapp size={18} />, label: "WhatsApp", href: SOCIAL_LINKS.whatsapp },
+    "divider",
+    { icon: <Mail size={18} />, label: "Email", href: SOCIAL_LINKS.email },
+  ] as const;
+
+  return (
+    <motion.div
+      initial={{ y: 80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 1.2, type: "spring", stiffness: 80, damping: 18 }}
+      className="fixed bottom-6 left-1/2 z-[150] -translate-x-1/2"
+    >
+      <div className="flex items-center gap-1 px-5 py-3 rounded-full bg-black/80 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+        {dockItems.map((item, i) => {
+          if (item === "divider") {
+            return <div key={i} className="w-px h-5 bg-white/15 mx-2" />;
+          }
+          const el = (
+            <motion.button
+              key={item.label}
+              whileHover={{ scale: 1.25, color: "#7b2ff7" }}
+              whileTap={{ scale: 0.9 }}
+              onClick={"action" in item ? item.action : undefined}
+              title={item.label}
+              className="w-9 h-9 flex items-center justify-center text-white/60 hover:text-[#7b2ff7] transition-colors duration-200 rounded-full hover:bg-white/5"
+            >
+              {item.icon}
+            </motion.button>
+          );
+          if ("href" in item) {
+            return (
+              <motion.a
+                key={item.label}
+                href={item.href}
+                target={item.href.startsWith("mailto") ? undefined : "_blank"}
+                rel="noreferrer"
+                whileHover={{ scale: 1.25 }}
+                whileTap={{ scale: 0.9 }}
+                title={item.label}
+                className="w-9 h-9 flex items-center justify-center text-white/60 hover:text-[#7b2ff7] transition-colors duration-200 rounded-full hover:bg-white/5"
+              >
+                {item.icon}
+              </motion.a>
+            );
+          }
+          return el;
+        })}
+      </div>
+    </motion.div>
+  );
+}
+
 /* ─── Reusable animation variants ────────────────────────────────────── */
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -134,6 +195,9 @@ export default function Home() {
 
       {/* ── Scroll progress bar ── */}
       <ScrollProgress />
+
+      {/* ── Sticky bottom dock ── */}
+      <StickyDock onScrollTo={scrollTo} />
 
       {/* ── Background ── */}
       <DotsBackground />
@@ -291,31 +355,6 @@ export default function Home() {
                 </motion.button>
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.85 }}
-                className="flex items-center gap-6 mt-6"
-              >
-                {[
-                  { href: SOCIAL_LINKS.github, icon: <SiGithub size={30} />, label: "github" },
-                  { href: SOCIAL_LINKS.linkedin, icon: <Linkedin size={30} />, label: "linkedin" },
-                  { href: SOCIAL_LINKS.discord, icon: <SiDiscord size={30} />, label: "discord" },
-                  { href: SOCIAL_LINKS.whatsapp, icon: <SiWhatsapp size={30} />, label: "whatsapp" },
-                  { href: SOCIAL_LINKS.email, icon: <Mail size={30} />, label: "email" },
-                ].map(({ href, icon, label }) => (
-                  <motion.a
-                    key={label}
-                    href={href}
-                    target={label !== "email" ? "_blank" : undefined}
-                    rel="noreferrer"
-                    whileHover={{ scale: 1.25, color: "#7b2ff7" }}
-                    className="text-white/45 transition-colors duration-200"
-                  >
-                    {icon}
-                  </motion.a>
-                ))}
-              </motion.div>
             </div>
 
             {/* Right: profile photo (desktop) */}
