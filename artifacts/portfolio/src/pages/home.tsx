@@ -210,18 +210,14 @@ export default function Home() {
 
   const toggleTheme = () => setIsLight(l => !l);
 
-  // Parallax for hero — GPU-accelerated via Framer Motion
-  const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 600], [0, -90]);
-
   // Lenis smooth scroll init
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.4,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 0.9,
+      easing: (t: number) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
-      touchMultiplier: 2,
-      wheelMultiplier: 1,
+      touchMultiplier: 1.5,
+      wheelMultiplier: 0.9,
     });
     lenisRef.current = lenis;
 
@@ -354,7 +350,7 @@ export default function Home() {
                 filter: "blur(18px)", animation: `ambient-float ${o.dur} ease-in-out infinite`,
                 animationDelay: o.delay }} />
           ))}
-          <motion.div style={{ y: heroY }} className="max-w-7xl mx-auto px-6 w-full flex flex-col md:flex-row items-center gap-12">
+          <div className="max-w-7xl mx-auto px-6 w-full flex flex-col md:flex-row items-center gap-12">
 
             {/* Left: text */}
             <div className="w-full md:w-[58%] flex flex-col items-start gap-6">
@@ -498,7 +494,7 @@ export default function Home() {
                 <img src={profilePhoto} alt="Deep Ghosh" className="w-full h-full object-cover rounded-full" />
               </motion.div>
             </div>
-          </motion.div>
+          </div>
         </section>
 
         {/* ── About ── */}
@@ -779,9 +775,9 @@ export default function Home() {
                 rel="noreferrer"
                 whileHover={{ scale: 1.25 }}
                 className="transition-colors duration-200"
-                style={{ color: "var(--fg-dim)" }}
+                style={{ color: "var(--fg)" }}
                 onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "var(--accent)")}
-                onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "var(--fg-dim)")}
+                onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "var(--fg)")}
               >
                 {icon}
               </motion.a>
