@@ -355,25 +355,26 @@
 }
 
 html.light-mode {
-  --accent:        #dc2626;
-  --accent-glow:   rgba(220,38,38,0.4);
-  --accent-dim:    rgba(220,38,38,0.2);
-  --accent-subtle: rgba(220,38,38,0.1);
-  --bg:            #f2f2f2;
-  --fg:            #111111;
-  --fg-muted:      rgba(17,17,17,0.6);
-  --fg-dim:        rgba(17,17,17,0.4);
-  --dot-primary:   rgba(0,0,0,0.28);
-  --dot-accent-c:  rgba(220,38,38,0.55);
-  --glass-bg:      rgba(0,0,0,0.05);
-  --glass-border:  rgba(220,38,38,0.2);
-  --nav-scrolled:  rgba(242,242,242,0.88);
-  --badge-bg:      #dc2626;
+  /* Claude / Anthropic warm palette */
+  --accent:        #c96a2e;
+  --accent-glow:   rgba(201,106,46,0.28);
+  --accent-dim:    rgba(201,106,46,0.16);
+  --accent-subtle: rgba(201,106,46,0.08);
+  --bg:            #faf7f3;
+  --fg:            #1c1410;
+  --fg-muted:      rgba(28,20,16,0.55);
+  --fg-dim:        rgba(28,20,16,0.38);
+  --dot-primary:   rgba(28,20,16,0.18);
+  --dot-accent-c:  rgba(201,106,46,0.35);
+  --glass-bg:      rgba(255,245,235,0.72);
+  --glass-border:  rgba(201,106,46,0.18);
+  --nav-scrolled:  rgba(250,247,243,0.9);
+  --badge-bg:      #c96a2e;
   --badge-text:    #ffffff;
-  --orb-color:     rgba(220,38,38,1);
-  --cursor-glow:   rgba(220,38,38,0.1);
-  --ring-gradient: conic-gradient(from 0deg,#dc2626,#ef4444,#fca5a5,transparent,#dc2626);
-  --ring-dot:      #ef4444;
+  --orb-color:     rgba(201,106,46,0.7);
+  --cursor-glow:   rgba(201,106,46,0.08);
+  --ring-gradient: conic-gradient(from 0deg,#c96a2e,#e8904a,#fcd39a,transparent,#c96a2e);
+  --ring-dot:      #e8904a;
 }
 
 html, body {
@@ -411,6 +412,31 @@ html.light-mode .rounded-full.bg-black { background-color: var(--bg) !important;
 html.light-mode input, html.light-mode textarea {
   color: var(--fg) !important;
   caret-color: var(--accent);
+}
+
+/* Light mode: override animation shadows so nothing looks purple */
+html.light-mode .hero-name-glow {
+  animation: hero-glow-light 5s ease-in-out infinite;
+}
+@keyframes hero-glow-light {
+  0%,100% { text-shadow: none; }
+  50%     { text-shadow: 0 0 60px rgba(201,106,46,0.18), 0 2px 24px rgba(28,20,16,0.08); }
+}
+
+html.light-mode .dock-breathe {
+  animation: dock-breathe-light 4s ease-in-out infinite;
+}
+@keyframes dock-breathe-light {
+  0%,100% { box-shadow: 0 4px 20px rgba(28,20,16,0.12), 0 1px 4px rgba(28,20,16,0.06); }
+  50%     { box-shadow: 0 6px 28px rgba(201,106,46,0.2), 0 1px 4px rgba(28,20,16,0.06); }
+}
+
+html.light-mode .badge-glow-override {
+  animation: badge-glow-light var(--badge-dur, 3s) ease-in-out infinite;
+}
+@keyframes badge-glow-light {
+  0%,100% { box-shadow: 0 2px 8px rgba(28,20,16,0.1); }
+  50%     { box-shadow: 0 4px 18px rgba(201,106,46,0.3), 0 2px 8px rgba(28,20,16,0.08); }
 }
 
 /* Nav link with theme-aware underline */
