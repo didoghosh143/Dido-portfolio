@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useSpring, useMotionValue, useScroll, useTransform } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
 import { Terminal, Mail, Linkedin } from "lucide-react";
@@ -109,7 +109,7 @@ function StickyDock({ onScrollTo }: { onScrollTo: (id: string) => void }) {
       transition={{ delay: 1.2, type: "spring", stiffness: 80, damping: 18 }}
       className="fixed bottom-6 left-1/2 z-[150] -translate-x-1/2"
     >
-      <div className="flex items-center gap-1 px-5 py-3 rounded-full bg-black/80 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+      <div className="flex items-center gap-1 px-5 py-3 rounded-full bg-black/80 backdrop-blur-2xl border border-white/10 dock-breathe">
         {dockItems.map((item, i) => {
           if (item === "divider") {
             return <div key={i} className="w-px h-5 bg-white/15 mx-2" />;
@@ -163,18 +163,29 @@ export default function Home() {
   const { toast } = useToast();
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const tickingRef = useRef(false);
+
+  // Parallax for hero section — GPU-accelerated, no React re-renders
+  const { scrollY } = useScroll();
+  const heroY = useTransform(scrollY, [0, 600], [0, -90]);
 
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > 50);
-      // Active section detection
-      const sections = ["about", "skills", "projects", "contact"];
-      let current = "";
-      for (const id of sections) {
-        const el = document.getElementById(id);
-        if (el && window.scrollY >= el.offsetTop - 160) current = id;
+      if (!tickingRef.current) {
+        requestAnimationFrame(() => {
+          const y = window.scrollY;
+          setScrolled(y > 50);
+          const sections = ["about", "skills", "projects", "contact"];
+          let current = "";
+          for (const id of sections) {
+            const el = document.getElementById(id);
+            if (el && y >= el.offsetTop - 160) current = id;
+          }
+          setActiveSection(current);
+          tickingRef.current = false;
+        });
+        tickingRef.current = true;
       }
-      setActiveSection(current);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -191,7 +202,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans selection:bg-[#7b2ff7] selection:text-black relative overflow-x-hidden">
+    <div className="min-h-screen bg-black text-white font-sans selection:bg-[#7b2ff7] selection:text-black relative">
 
       {/* ── Scroll progress bar ── */}
       <ScrollProgress />
@@ -256,8 +267,20 @@ export default function Home() {
       <main className="relative z-10 flex flex-col gap-36 pb-36">
 
         {/* ── Hero ── */}
-        <section className="min-h-screen flex items-center pt-20">
-          <div className="max-w-7xl mx-auto px-6 w-full flex flex-col md:flex-row items-center gap-12">
+        <section className="min-h-screen flex items-center pt-20 relative overflow-hidden">
+          {/* Ambient floating light orbs — CSS only, no JS */}
+          {[
+            { w: 90,  h: 90,  top: "18%", left: "8%",  dur: "9s",  delay: "0s"  },
+            { w: 65,  h: 65,  top: "65%", left: "18%", dur: "13s", delay: "4s"  },
+            { w: 110, h: 110, top: "38%", left: "3%",  dur: "16s", delay: "7s"  },
+          ].map((o, i) => (
+            <div key={i} className="absolute rounded-full pointer-events-none"
+              style={{ width: o.w, height: o.h, top: o.top, left: o.left,
+                background: "radial-gradient(circle, rgba(123,47,247,0.18) 0%, transparent 70%)",
+                filter: "blur(18px)", animation: `ambient-float ${o.dur} ease-in-out infinite`,
+                animationDelay: o.delay }} />
+          ))}
+          <motion.div style={{ y: heroY }} className="max-w-7xl mx-auto px-6 w-full flex flex-col md:flex-row items-center gap-12">
 
             {/* Left: text */}
             <div className="w-full md:w-[58%] flex flex-col items-start gap-6">
@@ -301,7 +324,7 @@ export default function Home() {
                 transition={{ type: "spring", stiffness: 60, damping: 18, delay: 0.1 }}
                 className="font-['Space_Grotesk'] text-6xl md:text-8xl lg:text-9xl font-black uppercase leading-none tracking-tighter"
               >
-                <span className="text-white" style={{ textShadow: "0 0 60px rgba(255,255,255,0.12)" }}>
+                <span className="text-white hero-name-glow">
                   Deep Ghosh
                 </span>
               </motion.h1>
@@ -397,7 +420,7 @@ export default function Home() {
                 <img src={profilePhoto} alt="Deep Ghosh" className="w-full h-full object-cover rounded-full" />
               </motion.div>
             </div>
-          </div>
+          </motion.div>
         </section>
 
         {/* ── About ── */}
@@ -479,14 +502,17 @@ export default function Home() {
               "Prompt Engineering", "RAG", "Agentic Workflows",
               "ChatGPT", "Claude", "Gemini", "Perplexity", "Replit AI", "GitHub Copilot",
               "Git", "GitHub", "VS Code", "Postman"
-            ].map(skill => (
+            ].map((skill, i) => (
               <motion.span
                 key={skill}
                 variants={fadeUp}
                 whileHover={{ scale: 1.06 }}
                 whileTap={{ scale: 0.97 }}
                 className="px-4 py-1.5 rounded-xl bg-white text-black font-['Space_Grotesk'] font-bold text-xs md:text-sm cursor-default select-none"
-                style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.25)" }}
+                style={{
+                  animation: `badge-glow ${3 + (i % 6) * 0.35}s ease-in-out infinite`,
+                  animationDelay: `${i * 0.13}s`,
+                }}
               >
                 {skill}
               </motion.span>
@@ -523,7 +549,10 @@ export default function Home() {
                 whileHover={{ y: -6, boxShadow: "0 0 30px rgba(123,47,247,0.25)" }}
                 className="glass-card rounded-xl overflow-hidden group transition-all duration-300"
               >
-                <div className="h-48 relative bg-gradient-to-br from-black to-white/5 flex items-center justify-center border-b border-white/10">
+                <div className="h-48 relative bg-gradient-to-br from-black to-white/5 flex items-center justify-center border-b border-white/10 overflow-hidden">
+                  {/* Live scan line */}
+                  <div className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#7b2ff7]/50 to-transparent pointer-events-none"
+                    style={{ animation: `scan-float ${8 + i * 2}s linear infinite`, animationDelay: `${i * 2.5}s` }} />
                   <Terminal size={44} className="text-white/15 group-hover:text-[#7b2ff7]/50 transition-colors duration-300" />
                   <div className="absolute top-4 right-4 px-2 py-1 border border-[#7b2ff7] text-[#7b2ff7] text-[10px] font-mono uppercase tracking-widest rounded animate-pulse bg-[#7b2ff7]/10">
                     🚧 Coming Soon
