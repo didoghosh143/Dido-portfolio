@@ -421,8 +421,8 @@ export default function Home() {
             transition={{ type: "spring", stiffness: 70 }}
             className="mb-12"
           >
-            <h2 className="font-mono text-2xl md:text-3xl font-bold uppercase tracking-wide">
-              <span className="text-[#7b2ff7] mr-2">//</span>Tech Stack & Skills
+            <h2 className="font-['Space_Grotesk'] text-2xl md:text-3xl font-bold text-white">
+              Skills
             </h2>
           </motion.div>
 
@@ -431,36 +431,26 @@ export default function Home() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
             variants={stagger}
-            className="flex flex-col gap-4"
+            className="flex flex-wrap gap-3"
           >
             {[
-              { title: "Frontend", skills: ["HTML5", "CSS3", "JavaScript ES6+", "React.js", "Vue.js"] },
-              { title: "Backend", skills: ["Node.js", "Express.js", "REST APIs", "Python"] },
-              { title: "AI & LLM", skills: ["LangChain", "OpenAI API", "Gemini API", "Mistral API", "Anthropic API", "Prompt Engineering", "RAG", "Agentic Workflows"] },
-              { title: "AI Tools", skills: ["ChatGPT", "Claude", "Gemini", "Perplexity", "Replit AI", "GitHub Copilot"] },
-              { title: "Dev Tools", skills: ["Git", "GitHub", "VS Code", "Postman"] }
-            ].map((cat, i) => (
-              <motion.div
-                key={i}
+              "HTML5", "CSS3", "JavaScript", "React.js", "Vue.js",
+              "Node.js", "Express.js", "REST APIs", "Python",
+              "LangChain", "OpenAI API", "Gemini API", "Mistral API", "Anthropic API",
+              "Prompt Engineering", "RAG", "Agentic Workflows",
+              "ChatGPT", "Claude", "Gemini", "Perplexity", "Replit AI", "GitHub Copilot",
+              "Git", "GitHub", "VS Code", "Postman"
+            ].map(skill => (
+              <motion.span
+                key={skill}
                 variants={fadeUp}
-                whileHover={{ x: 4 }}
-                className="glass-card p-5 rounded-xl flex flex-col md:flex-row gap-5 items-start md:items-center transition-all duration-300"
+                whileHover={{ scale: 1.06 }}
+                whileTap={{ scale: 0.97 }}
+                className="px-5 py-3 rounded-2xl bg-white text-black font-['Space_Grotesk'] font-bold text-sm md:text-base cursor-default select-none"
+                style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.25)" }}
               >
-                <div className="w-full md:w-44 shrink-0">
-                  <h3 className="font-bold text-white/75 uppercase tracking-wider text-xs">{cat.title}</h3>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {cat.skills.map(skill => (
-                    <motion.span
-                      key={skill}
-                      whileHover={{ scale: 1.07, borderColor: "#7b2ff7", color: "#7b2ff7" }}
-                      className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5 font-['JetBrains_Mono'] text-xs text-white/75 hover:bg-[#7b2ff7]/10 transition-all cursor-default"
-                    >
-                      {skill}
-                    </motion.span>
-                  ))}
-                </div>
-              </motion.div>
+                {skill}
+              </motion.span>
             ))}
           </motion.div>
         </section>
