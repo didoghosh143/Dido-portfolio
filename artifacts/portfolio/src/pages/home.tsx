@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useSpring, useMotionValue, useScroll, useTransform } from "framer-motion";
+import Lenis from "lenis";
 import { TypeAnimation } from "react-type-animation";
 import { Terminal, Mail, Linkedin } from "lucide-react";
 import { SiGithub, SiDiscord, SiWhatsapp } from "react-icons/si";
@@ -89,9 +90,9 @@ function CursorGlow() {
 }
 
 /* ─── Sticky floating dock ────────────────────────────────────────────── */
-function StickyDock({ onScrollTo }: { onScrollTo: (id: string) => void }) {
+function StickyDock({ onScrollTo, onScrollTop }: { onScrollTo: (id: string) => void; onScrollTop: () => void }) {
   const dockItems = [
-    { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>, label: "Home", action: () => window.scrollTo({ top: 0, behavior: "smooth" }) },
+    { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>, label: "Home", action: onScrollTop },
     { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>, label: "About", action: () => onScrollTo("about") },
     "divider",
     { icon: <SiGithub size={18} />, label: "GitHub", href: SOCIAL_LINKS.github },
@@ -163,32 +164,46 @@ export default function Home() {
   const { toast } = useToast();
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
-  const tickingRef = useRef(false);
+  const lenisRef = useRef<Lenis | null>(null);
 
-  // Parallax for hero section — GPU-accelerated, no React re-renders
+  // Parallax for hero — GPU-accelerated via Framer Motion
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 600], [0, -90]);
 
+  // Lenis smooth scroll init
   useEffect(() => {
-    const onScroll = () => {
-      if (!tickingRef.current) {
-        requestAnimationFrame(() => {
-          const y = window.scrollY;
-          setScrolled(y > 50);
-          const sections = ["about", "skills", "projects", "contact"];
-          let current = "";
-          for (const id of sections) {
-            const el = document.getElementById(id);
-            if (el && y >= el.offsetTop - 160) current = id;
-          }
-          setActiveSection(current);
-          tickingRef.current = false;
-        });
-        tickingRef.current = true;
+    const lenis = new Lenis({
+      duration: 1.4,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      touchMultiplier: 2,
+      wheelMultiplier: 1,
+    });
+    lenisRef.current = lenis;
+
+    lenis.on("scroll", ({ scroll }: { scroll: number }) => {
+      setScrolled(scroll > 50);
+      const sections = ["about", "skills", "projects", "contact"];
+      let current = "";
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el && scroll >= el.offsetTop - 160) current = id;
       }
+      setActiveSection(current);
+    });
+
+    let rafId: number;
+    function raf(time: number) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+      lenisRef.current = null;
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const handleContactSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -198,7 +213,18 @@ export default function Home() {
   };
 
   const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(el, { offset: -80 });
+    } else {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const scrollTop = () => {
+    if (lenisRef.current) lenisRef.current.scrollTo(0);
+    else window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -208,7 +234,7 @@ export default function Home() {
       <ScrollProgress />
 
       {/* ── Sticky bottom dock ── */}
-      <StickyDock onScrollTo={scrollTo} />
+      <StickyDock onScrollTo={scrollTo} onScrollTop={scrollTop} />
 
       {/* ── Background ── */}
       <DotsBackground />
@@ -225,7 +251,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <div
             className="flex items-center gap-3 cursor-pointer group"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onClick={scrollTop}
           >
             <img
               src={profilePhoto}

@@ -332,9 +332,9 @@
 }
 
 html, body {
-  scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden;
+  /* scroll-behavior handled by Lenis */
 }
 
 /* Promote fixed & animated elements to their own GPU compositing layer */
