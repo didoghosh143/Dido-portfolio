@@ -446,7 +446,7 @@ export default function Home() {
                 variants={fadeUp}
                 whileHover={{ scale: 1.06 }}
                 whileTap={{ scale: 0.97 }}
-                className="px-5 py-3 rounded-2xl bg-white text-black font-['Space_Grotesk'] font-bold text-sm md:text-base cursor-default select-none"
+                className="px-4 py-1.5 rounded-xl bg-white text-black font-['Space_Grotesk'] font-bold text-xs md:text-sm cursor-default select-none"
                 style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.25)" }}
               >
                 {skill}
