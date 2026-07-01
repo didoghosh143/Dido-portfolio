@@ -54,7 +54,7 @@ function ScrollProgress() {
   const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
   return (
     <motion.div
-      className="fixed top-0 left-0 right-0 h-[2px] z-[200] origin-left"
+      className="fixed top-0 left-0 right-0 h-[2px] z-[200] origin-left scroll-progress-bar"
       style={{ scaleX, background: "var(--accent)" }}
     />
   );
@@ -327,7 +327,7 @@ export default function Home() {
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             onClick={() => scrollTo("contact")}
-            className="hidden md:block px-5 py-2 font-mono text-xs uppercase tracking-widest rounded transition-all duration-300 hover:text-white"
+            className="hire-me-btn hidden md:block px-5 py-2 font-mono text-xs uppercase tracking-widest rounded transition-all duration-300 hover:text-white"
             style={{ color: "var(--accent)", border: "1px solid var(--accent-dim)" }}
             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--accent)"; (e.currentTarget as HTMLElement).style.color = "#ffffff"; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ""; (e.currentTarget as HTMLElement).style.color = "var(--accent)"; }}
@@ -385,10 +385,10 @@ export default function Home() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: "spring", stiffness: 120 }}
-                className="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm"
+                className="hello-badge hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm"
               >
-                <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: "var(--accent)" }} />
-                <span className="font-mono text-xs text-white/80">👋 Hello, I'm</span>
+                <span className="badge-dot w-2 h-2 rounded-full animate-pulse" style={{ background: "var(--accent)" }} />
+                <span className="badge-label font-mono text-xs text-white/80">👋 Hello, I'm</span>
               </motion.div>
 
               <motion.h1
@@ -397,7 +397,7 @@ export default function Home() {
                 transition={{ type: "spring", stiffness: 60, damping: 18, delay: 0.1 }}
                 className="font-['Space_Grotesk'] text-6xl md:text-8xl lg:text-9xl font-black uppercase leading-none tracking-tighter"
               >
-                <span className="text-white hero-name-glow">
+                <span className={isLight ? "gradient-text" : "text-white hero-name-glow"}>
                   Deep Ghosh
                 </span>
               </motion.h1>
@@ -413,7 +413,7 @@ export default function Home() {
                   wrapper="div"
                   speed={55}
                   className="font-mono text-xl md:text-2xl"
-                  style={{ color: "var(--accent)" } as React.CSSProperties}
+                  style={{ color: isLight ? "#4f46e5" : "var(--accent)" } as React.CSSProperties}
                   repeat={Infinity}
                   cursor
                 />
@@ -561,7 +561,7 @@ export default function Home() {
             className="mb-12"
           >
             <h2 className="font-['Space_Grotesk'] text-2xl md:text-3xl font-bold text-white">
-              Skills
+              <span className="section-accent mr-2" style={{ color: isLight ? "#4f46e5" : "var(--accent)" }}>//</span>Skills
             </h2>
           </motion.div>
 
@@ -609,7 +609,7 @@ export default function Home() {
             className="mb-12"
           >
             <h2 className="font-mono text-2xl md:text-3xl font-bold uppercase tracking-wide">
-              <span style={{ color: "var(--accent)" }} className="mr-2">//</span>My Projects
+              <span style={{ color: isLight ? "#4f46e5" : "var(--accent)" }} className="section-accent mr-2">//</span>My Projects
             </h2>
             <p className="text-white/45 font-mono text-sm mt-3">Building in public — projects coming soon</p>
           </motion.div>
@@ -663,7 +663,7 @@ export default function Home() {
               className="mb-10"
             >
               <h2 className="font-mono text-xl md:text-3xl font-bold uppercase tracking-wide">
-                <span style={{ color: "var(--accent)" }} className="mr-2">//</span>Let's Build Something
+                <span style={{ color: isLight ? "#4f46e5" : "var(--accent)" }} className="section-accent mr-2">//</span>Let's Build Something
               </h2>
               <p className="text-white/55 font-mono text-xs md:text-sm mt-3 max-w-2xl">
                 Whether it's a collaboration, opportunity, or just a chat about AI — I'm always open.
@@ -694,7 +694,7 @@ export default function Home() {
                     href={href}
                     target={target}
                     rel={target ? "noreferrer" : undefined}
-                    className="glass-card w-full rounded-xl p-3 flex items-center gap-3 transition-all duration-200 group overflow-hidden"
+                    className="contact-link-card glass-card w-full rounded-xl p-3 flex items-center gap-3 transition-all duration-200 group overflow-hidden"
                   >
                     {icon}
                     <div className="min-w-0 flex-1 overflow-hidden">

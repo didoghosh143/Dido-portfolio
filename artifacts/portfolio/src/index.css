@@ -357,7 +357,8 @@
 html.light-mode {
   /* Pure black / white / gray design system */
   --accent:        #000000;
-  --accent-fg:     #ffffff;   /* text ON TOP of accent-bg buttons */
+  --accent-fg:     #ffffff;
+  --accent-vivid:  #4f46e5;   /* indigo — ONE pop color for text accents */
   --accent-glow:   rgba(0,0,0,0.10);
   --accent-dim:    rgba(0,0,0,0.06);
   --accent-subtle: rgba(0,0,0,0.03);
@@ -448,9 +449,75 @@ html.light-mode [class*="rounded-xl"] {
   box-shadow: none;
 }
 
-/* Dot grid override for light — very faint on white */
-html.light-mode .glow-cyan { box-shadow: 0 2px 12px rgba(0,0,0,0.1) !important; }
+/* ── Light mode: dot grid background ── */
+html.light-mode body {
+  background-image: radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Section // accent marks → indigo pop */
+html.light-mode .section-accent { color: #4f46e5 !important; }
+
+/* Hero gradient text — deep navy → indigo */
+html.light-mode .gradient-text {
+  background: linear-gradient(135deg, #0f172a 0%, #4f46e5 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+/* Hello badge — inverted pill in light mode */
+html.light-mode .hello-badge {
+  background: #000000 !important;
+  border-color: transparent !important;
+}
+html.light-mode .hello-badge .badge-dot { background: #4f46e5 !important; }
+html.light-mode .hello-badge .badge-label { color: #ffffff !important; }
+
+/* Card elevation — lift + indigo border glow */
+html.light-mode .glass-card {
+  transition: box-shadow 0.25s ease, border-color 0.25s ease !important;
+}
+html.light-mode .glass-card:hover {
+  box-shadow: 0 20px 60px rgba(0,0,0,0.09), 0 4px 14px rgba(0,0,0,0.06), 0 0 0 1.5px rgba(79,70,229,0.22) !important;
+  border-color: rgba(79,70,229,0.18) !important;
+}
+
+/* Input / textarea focus ring — indigo */
+html.light-mode input:focus,
+html.light-mode textarea:focus {
+  outline: none !important;
+  border-color: #4f46e5 !important;
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.12) !important;
+}
+
+/* Badge glow — indigo tint */
+@keyframes badge-glow-light {
+  0%,100% { box-shadow: 0 2px 8px rgba(0,0,0,0.09); }
+  50%     { box-shadow: 0 4px 22px rgba(79,70,229,0.22), 0 2px 8px rgba(0,0,0,0.06); }
+}
+
+/* Scroll progress bar — indigo in light mode */
+html.light-mode .scroll-progress-bar { background: linear-gradient(to right, #4f46e5, #06b6d4) !important; }
+
+/* Contact card hover accent */
+html.light-mode .contact-link-card:hover {
+  border-left: 3px solid #4f46e5 !important;
+  padding-left: calc(0.75rem - 2px) !important;
+}
+
+/* glow utilities — neutral in light mode */
+html.light-mode .glow-cyan { box-shadow: 0 2px 12px rgba(79,70,229,0.15) !important; }
 html.light-mode .glow-cyan-text { text-shadow: none !important; }
+
+/* Nav "HIRE ME" border accent in light mode */
+html.light-mode .hire-me-btn {
+  border-color: #000000 !important;
+}
+html.light-mode .hire-me-btn:hover {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
 
 /* Nav link with theme-aware underline */
 .nav-btn::after {
