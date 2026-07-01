@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,84690,o=>{o.q("/Dido-portfolio/_next/static/media/profile.2j__1w0yobh0f.png")}]);
