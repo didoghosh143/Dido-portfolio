@@ -415,13 +415,13 @@ export default function Home() {
     }
 
     const lenis = new Lenis({
-      duration: 0.9,
-      easing: (t: number) => 1 - Math.pow(1 - t, 3),
-      lerp: 0.13,
+      duration: 1.5,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: 0.06,
       smoothWheel: true,
       syncTouch: false,
-      touchMultiplier: 1,
-      wheelMultiplier: 0.95,
+      touchMultiplier: 1.5,
+      wheelMultiplier: 0.6,
     });
     lenisRef.current = lenis;
 
