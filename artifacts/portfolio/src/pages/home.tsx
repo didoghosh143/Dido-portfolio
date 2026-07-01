@@ -16,33 +16,39 @@ const SOCIAL_LINKS = {
   whatsapp: "https://wa.me/917583952349"
 };
 
-/* ─── CSS Dot Grid — zero JS, GPU-accelerated, works on all devices ─── */
+/* ─── Touch device detection ─────────────────────────────────────────── */
+function useIsTouchDevice() {
+  const [isTouch, setIsTouch] = useState(false);
+  useEffect(() => {
+    setIsTouch(window.matchMedia("(pointer: coarse)").matches);
+  }, []);
+  return isTouch;
+}
+
+/* ─── CSS Dot Grid — zero JS, GPU-accelerated ─────────────────────────── */
 function DotsBackground() {
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      {/* Fine primary grid — drifts diagonally */}
+      {/* Fine primary grid — drifts diagonally (disabled on touch via CSS) */}
       <div
-        className="absolute inset-0"
+        className="dots-bg-layer-1 absolute inset-0"
         style={{
           backgroundImage: "radial-gradient(circle, var(--dot-primary) 1.2px, transparent 1.2px)",
           backgroundSize: "28px 28px",
           animation: "dots-drift 22s linear infinite",
+          willChange: "transform",
         }}
       />
-      {/* Medium accent grid — drifts opposite direction */}
+      {/* Medium accent grid — drifts opposite (disabled on touch via CSS) */}
       <div
-        className="absolute inset-0 opacity-40"
+        className="dots-bg-layer-2 absolute inset-0 opacity-40"
         style={{
           backgroundImage: "radial-gradient(circle, var(--dot-accent-c) 1.6px, transparent 1.6px)",
           backgroundSize: "70px 70px",
           backgroundPosition: "14px 14px",
           animation: "dots-drift2 45s linear infinite",
+          willChange: "transform",
         }}
-      />
-      {/* Subtle overall pulse */}
-      <div
-        className="absolute inset-0"
-        style={{ animation: "dot-pulse 6s ease-in-out infinite", background: "transparent" }}
       />
     </div>
   );
@@ -140,7 +146,7 @@ function StickyDock({
           if (item === "divider") {
             return <div key={i} className="w-px h-5 mx-2" style={{ background: isLight ? "#e5e7eb" : "var(--glass-border)" }} />;
           }
-          const sharedClass = "w-9 h-9 flex items-center justify-center transition-colors duration-200 rounded-full";
+          const sharedClass = "dock-touch-btn w-11 h-11 flex items-center justify-center transition-colors duration-200 rounded-full";
           const el = (
             <motion.button
               key={item.label}
@@ -163,8 +169,8 @@ function StickyDock({
                 href={item.href}
                 target={item.href.startsWith("mailto") ? undefined : "_blank"}
                 rel="noreferrer"
-                whileHover={{ scale: 1.25 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.88 }}
                 title={item.label}
                 className={sharedClass}
                 style={{ color: iconColor }}
@@ -184,16 +190,26 @@ function StickyDock({
 
 /* ─── Reusable animation variants ────────────────────────────────────── */
 const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 70, damping: 18 } }
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 80, damping: 20 } }
 };
 const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.09 } }
+  visible: { transition: { staggerChildren: 0.07 } }
+};
+/* Skill-specific variants — tighter stagger, smaller y = less GPU work per frame */
+const skillStagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.04, delayChildren: 0 } }
+};
+const skillFadeUp = {
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 22 } }
 };
 
 export default function Home() {
   const { toast } = useToast();
+  const isTouch = useIsTouchDevice();
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const lenisRef = useRef<Lenis | null>(null);
@@ -281,11 +297,11 @@ export default function Home() {
 
       {/* ── Background ── */}
       <DotsBackground />
-      <CursorGlow />
+      {!isTouch && <CursorGlow />}
 
-      {/* Subtle purple orb */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-150px] left-[-150px] w-[700px] h-[700px] rounded-full blur-[120px] opacity-15"
+      {/* Subtle purple orb — hidden on mobile via ambient-orb class */}
+      <div className="ambient-orb fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-[-150px] left-[-150px] w-[600px] h-[600px] rounded-full blur-[90px] opacity-10"
           style={{ background: "radial-gradient(circle, var(--orb-color) 0%, transparent 70%)" }} />
       </div>
 
@@ -542,7 +558,8 @@ export default function Home() {
                 <motion.div
                   key={i}
                   variants={fadeUp}
-                  whileHover={{ y: -5, boxShadow: "0 0 24px var(--accent-dim)" }}
+                  whileHover={{ y: -5 }}
+                  whileTap={{ scale: 0.96 }}
                   className="glass-card p-6 rounded-xl transition-all duration-300"
                 >
                   <div className="text-3xl mb-4">{card.icon}</div>
@@ -568,11 +585,12 @@ export default function Home() {
             </h2>
           </motion.div>
 
+          {/* Skills grid — skillStagger (0.04s) + small y (12px) = mobile-smooth */}
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-            variants={stagger}
+            viewport={{ once: true, margin: "-50px" }}
+            variants={skillStagger}
             className="flex flex-wrap gap-3"
           >
             {[
@@ -582,18 +600,15 @@ export default function Home() {
               "Prompt Engineering", "RAG", "Agentic Workflows",
               "ChatGPT", "Claude", "Gemini", "Perplexity", "Replit AI", "GitHub Copilot",
               "Git", "GitHub", "VS Code", "Postman"
-            ].map((skill, i) => (
+            ].map((skill) => (
               <motion.span
                 key={skill}
-                variants={fadeUp}
-                whileHover={{ scale: 1.06 }}
-                whileTap={{ scale: 0.97 }}
-                className="px-4 py-1.5 rounded-xl font-['Space_Grotesk'] font-bold text-xs md:text-sm cursor-default select-none"
+                variants={skillFadeUp}
+                whileTap={{ scale: 0.92 }}
+                className="transform-gpu px-4 py-2 rounded-xl font-['Space_Grotesk'] font-bold text-xs md:text-sm cursor-default select-none min-h-[36px] flex items-center"
                 style={{
                   background: "var(--badge-bg)",
                   color: "var(--badge-text)",
-                  animation: `badge-glow ${3 + (i % 6) * 0.35}s ease-in-out infinite`,
-                  animationDelay: `${i * 0.13}s`,
                 }}
               >
                 {skill}
@@ -779,8 +794,9 @@ export default function Home() {
                 href={href}
                 target="_blank"
                 rel="noreferrer"
-                whileHover={{ scale: 1.25 }}
-                className="transition-colors duration-200"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.88 }}
+                className="transition-colors duration-200 p-2"
                 style={{ color: "var(--fg)" }}
                 onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "var(--accent)")}
                 onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "var(--fg)")}

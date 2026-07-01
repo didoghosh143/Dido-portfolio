@@ -427,20 +427,22 @@ html.light-mode .hero-name-glow {
   text-shadow: none;
 }
 
+/* dock-breathe-light: transform only — no repaint */
 html.light-mode .dock-breathe {
   animation: dock-breathe-light 4s ease-in-out infinite;
 }
 @keyframes dock-breathe-light {
-  0%,100% { box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04); }
-  50%     { box-shadow: 0 6px 24px rgba(0,0,0,0.13), 0 1px 3px rgba(0,0,0,0.04); }
+  0%,100% { transform: translateY(0px);  }
+  50%     { transform: translateY(-2px); }
 }
 
+/* badge-glow-light: transform+opacity only */
 html.light-mode .badge-glow-override {
   animation: badge-glow-light var(--badge-dur, 3s) ease-in-out infinite;
 }
 @keyframes badge-glow-light {
-  0%,100% { box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
-  50%     { box-shadow: 0 4px 14px rgba(0,0,0,0.14); }
+  0%,100% { transform: scale(1);    opacity: 0.85; }
+  50%     { transform: scale(1.02); opacity: 1; }
 }
 
 /* Light mode card overrides — thin border, no heavy shadows */
@@ -538,10 +540,26 @@ html.light-mode .hire-me-btn:hover {
 /* GPU acceleration for heavy scroll-time animations */
 [style*="rotate-ring"],
 [style*="animation"] { will-change: transform; }
-.dock-breathe { will-change: box-shadow; }
+.dock-breathe { will-change: transform; }
 .hero-name-glow { will-change: text-shadow; }
 /* Prevent layout thrash during scroll */
 main { contain: layout style; }
+
+/* ── Mobile performance rules (@media pointer:coarse = touch device) ── */
+@media (pointer: coarse) {
+  /* Kill backdrop-filter on cards — biggest mobile GPU killer */
+  .glass-card {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  /* Stop dots-drift continuous animations on mobile */
+  .dots-bg-layer-1,
+  .dots-bg-layer-2 { animation: none !important; }
+  /* Remove heavy blur orb on mobile */
+  .ambient-orb { display: none !important; }
+  /* Ensure 44×44px touch targets on dock */
+  .dock-touch-btn { min-width: 44px !important; min-height: 44px !important; }
+}
 
 /* ── Keyframes ─────────────────────────────────────────────────── */
 @keyframes float       { 0%,100% { transform: translateY(0px); }        50%  { transform: translateY(-20px); } }
@@ -553,17 +571,19 @@ main { contain: layout style; }
 @keyframes dot-pulse   { 0%,100% { opacity: 0.55; }                     50%  { opacity: 0.85; } }
 
 /* ── Live ambient animations ───────────────────────────────────── */
+/* badge-glow: transform+opacity ONLY — zero paint cost, GPU-composited */
 @keyframes badge-glow {
-  0%,100% { box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-  50%     { box-shadow: 0 4px 22px var(--accent-glow), 0 2px 8px rgba(0,0,0,0.2); }
+  0%,100% { transform: scale(1);    opacity: 0.88; }
+  50%     { transform: scale(1.03); opacity: 1; }
 }
 @keyframes hero-glow {
   0%,100% { text-shadow: 0 0 60px rgba(255,255,255,0.08); }
   50%     { text-shadow: 0 0 100px var(--accent-dim), 0 0 60px rgba(255,255,255,0.12); }
 }
+/* dock-breathe: transform only — no box-shadow repaint */
 @keyframes dock-breathe {
-  0%,100% { box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-  50%     { box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 30px var(--accent-dim); }
+  0%,100% { transform: translateY(0px);  }
+  50%     { transform: translateY(-2px); }
 }
 @keyframes ambient-float {
   0%,100% { transform: translate(0,0) scale(1);    opacity: 0.35; }
