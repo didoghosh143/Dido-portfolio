@@ -388,6 +388,10 @@ html, body {
   /* scroll-behavior handled by Lenis */
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Tailwind class overrides for light mode */
 html.light-mode .glass-card {
   background: var(--glass-bg) !important;
@@ -545,6 +549,24 @@ html.light-mode .hire-me-btn:hover {
 /* Prevent layout thrash during scroll */
 main { contain: layout style; }
 
+html.is-scrolling .dots-bg-layer-1,
+html.is-scrolling .dots-bg-layer-2,
+html.is-scrolling .ambient-orb *,
+html.is-scrolling .hero-name-glow,
+html.is-scrolling .live-text-gradient,
+html.is-scrolling [style*="rotate-ring"],
+html.is-scrolling [style*="ambient-float"],
+html.is-scrolling [style*="scan-float"] {
+  animation-play-state: paused !important;
+}
+
+html.is-scrolling .glass-card,
+html.is-scrolling nav,
+html.is-scrolling footer {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
 /* ── Mobile performance rules (@media pointer:coarse = touch device) ── */
 @media (pointer: coarse) {
   /* Kill backdrop-filter on cards — biggest mobile GPU killer */
@@ -557,6 +579,13 @@ main { contain: layout style; }
   .dots-bg-layer-2 { animation: none !important; }
   /* Remove heavy blur orb on mobile */
   .ambient-orb { display: none !important; }
+  .hero-name-glow,
+  .live-text-gradient,
+  [style*="rotate-ring"],
+  [style*="ambient-float"],
+  [style*="scan-float"] {
+    animation-play-state: paused !important;
+  }
   /* Ensure 44×44px touch targets on dock */
   .dock-touch-btn { min-width: 44px !important; min-height: 44px !important; }
 }

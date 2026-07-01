@@ -338,6 +338,8 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const lenisRef = useRef<Lenis | null>(null);
+  const scrolledRef = useRef(false);
+  const activeSectionRef = useRef("");
   const [isLight, setIsLight] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -365,26 +367,66 @@ export default function Home() {
 
   // Lenis smooth scroll init
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.5,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      lerp: 0.08,
-      smoothWheel: true,
-      syncTouch: true,
-      touchMultiplier: 2.5,
-      wheelMultiplier: 1,
-    });
-    lenisRef.current = lenis;
+    const sections = ["about", "skills", "projects", "contact"];
+    let scrollingTimer: ReturnType<typeof setTimeout> | undefined;
 
-    lenis.on("scroll", ({ scroll }: { scroll: number }) => {
-      setScrolled(scroll > 50);
-      const sections = ["about", "skills", "projects", "contact"];
+    const markScrolling = () => {
+      document.documentElement.classList.add("is-scrolling");
+      if (scrollingTimer) clearTimeout(scrollingTimer);
+      scrollingTimer = setTimeout(() => {
+        document.documentElement.classList.remove("is-scrolling");
+      }, 160);
+    };
+
+    const updateScrollState = (scroll: number) => {
+      markScrolling();
+
+      const nextScrolled = scroll > 50;
+      if (scrolledRef.current !== nextScrolled) {
+        scrolledRef.current = nextScrolled;
+        setScrolled(nextScrolled);
+      }
+
       let current = "";
       for (const id of sections) {
         const el = document.getElementById(id);
         if (el && scroll >= el.offsetTop - 160) current = id;
       }
-      setActiveSection(current);
+
+      if (activeSectionRef.current !== current) {
+        activeSectionRef.current = current;
+        setActiveSection(current);
+      }
+    };
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const usesCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+
+    if (usesCoarsePointer || prefersReducedMotion) {
+      const handleNativeScroll = () => updateScrollState(window.scrollY);
+      window.addEventListener("scroll", handleNativeScroll, { passive: true });
+      handleNativeScroll();
+
+      return () => {
+        window.removeEventListener("scroll", handleNativeScroll);
+        if (scrollingTimer) clearTimeout(scrollingTimer);
+        document.documentElement.classList.remove("is-scrolling");
+      };
+    }
+
+    const lenis = new Lenis({
+      duration: 0.9,
+      easing: (t: number) => 1 - Math.pow(1 - t, 3),
+      lerp: 0.13,
+      smoothWheel: true,
+      syncTouch: false,
+      touchMultiplier: 1,
+      wheelMultiplier: 0.95,
+    });
+    lenisRef.current = lenis;
+
+    lenis.on("scroll", ({ scroll }: { scroll: number }) => {
+      updateScrollState(scroll);
     });
 
     let rafId: number;
@@ -398,6 +440,8 @@ export default function Home() {
       cancelAnimationFrame(rafId);
       lenis.destroy();
       lenisRef.current = null;
+      if (scrollingTimer) clearTimeout(scrollingTimer);
+      document.documentElement.classList.remove("is-scrolling");
     };
   }, []);
 
@@ -411,14 +455,14 @@ export default function Home() {
     const el = document.getElementById(id);
     if (!el) return;
     if (lenisRef.current) {
-      lenisRef.current.scrollTo(el, { offset: -80 });
+      lenisRef.current.scrollTo(el, { offset: -80, duration: 0.85 });
     } else {
       el.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const scrollTop = () => {
-    if (lenisRef.current) lenisRef.current.scrollTo(0);
+    if (lenisRef.current) lenisRef.current.scrollTo(0, { duration: 0.85 });
     else window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
