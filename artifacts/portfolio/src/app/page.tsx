@@ -1,11 +1,13 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
 import { motion, useSpring, useMotionValue, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Lenis from "lenis";
 import { TypeAnimation } from "react-type-animation";
-import { Terminal, Mail, Linkedin, Sun, Moon } from "lucide-react";
+import { Terminal, Mail, Sun, Moon, Bot, Cpu, GraduationCap, Zap } from "lucide-react";
 import { SiGithub, SiDiscord, SiWhatsapp } from "react-icons/si";
+import { FaLinkedin } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
-import profilePhoto from "@assets/Untitled_(LinkedIn_Profile_Picture)_20260115_100743_0000_1779420104799.png";
+import profilePhoto from "@assets/profile.png";
 
 const SOCIAL_LINKS = {
   github: "https://github.com/didoghosh143",
@@ -123,7 +125,7 @@ function StickyDock({
     { id: "about",    icon: <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>, label: "About", action: () => onScrollTo("about") },
     "divider",
     { id: "github",   icon: <SiGithub size={21} />,   label: "GitHub",   href: SOCIAL_LINKS.github },
-    { id: "linkedin", icon: <Linkedin size={21} strokeWidth={2} />,  label: "LinkedIn", href: SOCIAL_LINKS.linkedin },
+    { id: "linkedin", icon: <FaLinkedin size={21} />,  label: "LinkedIn", href: SOCIAL_LINKS.linkedin },
     { id: "discord",  icon: <SiDiscord size={21} />,  label: "Discord",  href: SOCIAL_LINKS.discord },
     { id: "whatsapp", icon: <SiWhatsapp size={21} />, label: "WhatsApp", href: SOCIAL_LINKS.whatsapp },
     "divider",
@@ -131,11 +133,11 @@ function StickyDock({
   ] as const;
 
   /* Pill slides up, then each icon cascades in */
-  const pillVariants = {
+  const pillVariants: Variants = {
     hidden: { y: 120, opacity: 0 },
     visible: { y: 0, opacity: 1, transition: { delay: 0.8, type: "spring", stiffness: 110, damping: 20 } },
   };
-  const iconVariants = {
+  const iconVariants: Variants = {
     hidden:  { opacity: 0, y: 20, scale: 0.4 },
     visible: (custom: number) => ({
       opacity: 1, y: 0, scale: 1,
@@ -203,7 +205,7 @@ function StickyDock({
 
           iconIdx++;
           const cfg = DOCK_ITEMS_CONFIG.find(c => c.id === item.id);
-          const brandColor = cfg?.color ?? defaultColor;
+          const brandColor = item.id === "github" && isLight ? "#000000" : (cfg?.color ?? defaultColor);
           const floatDelay = cfg?.floatDelay ?? 0;
           const isHov = hoveredId === item.id;
 
@@ -310,20 +312,22 @@ function StickyDock({
 }
 
 /* ─── Reusable animation variants ────────────────────────────────────── */
-const fadeUp = {
+import type { Variants } from "framer-motion";
+
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 80, damping: 20 } }
 };
-const stagger = {
+const stagger: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.07 } }
 };
 /* Skill-specific variants — tighter stagger, smaller y = less GPU work per frame */
-const skillStagger = {
+const skillStagger: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.04, delayChildren: 0 } }
 };
-const skillFadeUp = {
+const skillFadeUp: Variants = {
   hidden: { opacity: 0, y: 12 },
   visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 22 } }
 };
@@ -353,11 +357,13 @@ export default function Home() {
   // Lenis smooth scroll init
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 0.9,
-      easing: (t: number) => 1 - Math.pow(1 - t, 3),
+      duration: 1.5,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: 0.08,
       smoothWheel: true,
-      touchMultiplier: 1.5,
-      wheelMultiplier: 0.9,
+      syncTouch: true,
+      touchMultiplier: 2.5,
+      wheelMultiplier: 1,
     });
     lenisRef.current = lenis;
 
@@ -437,7 +443,7 @@ export default function Home() {
             onClick={scrollTop}
           >
             <img
-              src={profilePhoto}
+              src={profilePhoto.src}
               alt="Deep Ghosh"
               className="w-8 h-8 rounded-full object-cover ring-2 transition-all duration-300"
               style={{ outline: "2px solid var(--accent-dim)" }}
@@ -505,7 +511,7 @@ export default function Home() {
                 <div className="relative self-center">
                   <div className="absolute inset-0 rounded-full blur-xl opacity-50" style={{ background: "radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)" }} />
                   <img
-                    src={profilePhoto}
+                    src={profilePhoto.src}
                     alt="Deep Ghosh"
                     className="relative w-32 h-32 rounded-full object-cover border-2"
                     style={{ borderColor: "var(--accent-dim)", boxShadow: "0 0 24px var(--accent-glow), 0 0 48px var(--accent-dim)" }}
@@ -552,8 +558,7 @@ export default function Home() {
                   ]}
                   wrapper="div"
                   speed={55}
-                  className="font-mono text-xl md:text-2xl"
-                  style={{ color: isLight ? "#4f46e5" : "var(--accent)" } as React.CSSProperties}
+                  className="font-mono text-xl md:text-2xl live-text-gradient"
                   repeat={Infinity}
                   cursor
                 />
@@ -634,7 +639,7 @@ export default function Home() {
                 className="relative z-10 w-[320px] h-[320px] rounded-full overflow-hidden"
                 style={{ boxShadow: "0 0 50px var(--accent-glow), 0 0 90px var(--accent-dim)" }}
               >
-                <img src={profilePhoto} alt="Deep Ghosh" className="w-full h-full object-cover rounded-full" />
+                <img src={profilePhoto.src} alt="Deep Ghosh" className="w-full h-full object-cover rounded-full" />
               </motion.div>
             </div>
           </div>
@@ -671,10 +676,10 @@ export default function Home() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
-                { icon: "🤖", title: "AI Tools", desc: "ChatGPT, Claude, Gemini, Perplexity" },
-                { icon: "🔌", title: "APIs", desc: "OpenAI, Gemini, Mistral, Anthropic" },
-                { icon: "🎓", title: "Education", desc: "Computer Engineering + AI Agent Engineering" },
-                { icon: "⚡", title: "Focus", desc: "LLM Apps, Agentic AI, Full-Stack" }
+                { icon: <Bot size={32} style={{ color: isLight ? "#4f46e5" : "var(--accent)" }} />, title: "AI Tools", desc: "ChatGPT, Claude, Gemini, Perplexity" },
+                { icon: <Cpu size={32} style={{ color: isLight ? "#4f46e5" : "var(--accent)" }} />, title: "APIs", desc: "OpenAI, Gemini, Mistral, Anthropic" },
+                { icon: <GraduationCap size={32} style={{ color: isLight ? "#4f46e5" : "var(--accent)" }} />, title: "Education", desc: "Computer Engineering + AI Agent Engineering" },
+                { icon: <Zap size={32} style={{ color: isLight ? "#4f46e5" : "var(--accent)" }} />, title: "Focus", desc: "LLM Apps, Agentic AI, Full-Stack" }
               ].map((card, i) => (
                 <motion.div
                   key={i}
@@ -822,7 +827,7 @@ export default function Home() {
                   { href: SOCIAL_LINKS.email, icon: <Mail size={20} className="text-white/50 shrink-0" />, label: "Email", value: "didoghosh143@gmail.com" },
                   { href: SOCIAL_LINKS.phone, icon: <span className="text-white/50 shrink-0 text-lg leading-none">📞</span>, label: "Phone", value: "+91 7583952349" },
                   { href: SOCIAL_LINKS.whatsapp, target: "_blank", icon: <SiWhatsapp size={20} className="text-white/50 shrink-0" />, label: "WhatsApp", value: "wa.me/917583952349" },
-                  { href: SOCIAL_LINKS.linkedin, target: "_blank", icon: <Linkedin size={20} className="text-white/50 shrink-0" />, label: "LinkedIn", value: "linkedin.com/in/thedido" },
+                  { href: SOCIAL_LINKS.linkedin, target: "_blank", icon: <FaLinkedin size={20} className="text-white/50 shrink-0" />, label: "LinkedIn", value: "linkedin.com/in/thedido" },
                   { href: SOCIAL_LINKS.github, target: "_blank", icon: <SiGithub size={20} className="text-white/50 shrink-0" />, label: "GitHub", value: "github.com/didoghosh143" },
                   { href: SOCIAL_LINKS.discord, target: "_blank", icon: <SiDiscord size={20} className="text-white/50 shrink-0" />, label: "Discord", value: "@didoghosh143" },
                 ].map(({ href, icon, label, value, target }) => (
@@ -906,7 +911,7 @@ export default function Home() {
           <div className="flex items-center gap-6">
             {[
               { href: SOCIAL_LINKS.github, icon: <SiGithub size={28} /> },
-              { href: SOCIAL_LINKS.linkedin, icon: <Linkedin size={28} /> },
+              { href: SOCIAL_LINKS.linkedin, icon: <FaLinkedin size={28} /> },
               { href: SOCIAL_LINKS.discord, icon: <SiDiscord size={28} /> },
               { href: SOCIAL_LINKS.whatsapp, icon: <SiWhatsapp size={28} /> },
             ].map(({ href, icon }, i) => (
@@ -934,3 +939,4 @@ export default function Home() {
     </div>
   );
 }
+

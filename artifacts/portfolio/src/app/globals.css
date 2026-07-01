@@ -611,3 +611,28 @@ main { contain: layout style; }
 .glow-cyan-text   { text-shadow: 0 0 20px var(--accent-glow); }
 .hero-name-glow   { animation: hero-glow 5s ease-in-out infinite; }
 .dock-breathe     { animation: dock-breathe 4s ease-in-out infinite; }
+
+/* Live Text Gradient */
+.live-text-gradient {
+  background: linear-gradient(90deg, #3b82f6, #ec4899, #8b5cf6, #3b82f6);
+  background-size: 300% auto;
+  animation: shimmer-text 5s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+html.light-mode .live-text-gradient {
+  background: linear-gradient(90deg, #4f46e5, #ec4899, #06b6d4, #4f46e5);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.live-text-gradient::after {
+  color: var(--fg) !important;
+  -webkit-text-fill-color: var(--fg) !important;
+}
+@keyframes shimmer-text {
+  0% { background-position: 0% center; }
+  100% { background-position: 300% center; }
+}
