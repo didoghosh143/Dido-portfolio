@@ -397,7 +397,10 @@ export default function Home() {
                 transition={{ type: "spring", stiffness: 60, damping: 18, delay: 0.1 }}
                 className="font-['Space_Grotesk'] text-6xl md:text-8xl lg:text-9xl font-black uppercase leading-none tracking-tighter"
               >
-                <span className={isLight ? "gradient-text" : "text-white hero-name-glow"}>
+                <span
+                  className={isLight ? "" : "text-white hero-name-glow"}
+                  style={isLight ? { color: "#000000", WebkitTextFillColor: "#000000" } : undefined}
+                >
                   Deep Ghosh
                 </span>
               </motion.h1>

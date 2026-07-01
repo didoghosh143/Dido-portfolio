@@ -458,12 +458,11 @@ html.light-mode body {
 /* Section // accent marks → indigo pop */
 html.light-mode .section-accent { color: #4f46e5 !important; }
 
-/* Hero gradient text — deep navy → indigo */
+/* Hero gradient text — unused in light mode (hero name uses inline black) */
 html.light-mode .gradient-text {
-  background: linear-gradient(135deg, #0f172a 0%, #4f46e5 100%) !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  background-clip: text !important;
+  background: none !important;
+  -webkit-text-fill-color: #000000 !important;
+  color: #000000 !important;
 }
 
 /* Hello badge — inverted pill in light mode */
