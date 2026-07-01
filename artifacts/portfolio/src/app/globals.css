@@ -570,6 +570,19 @@ main { contain: layout style; }
   will-change: transform;
 }
 
+.dock-shell {
+  max-width: calc(100vw - 1rem);
+}
+
+.dock-touch-btn {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.dock-active-glow {
+  animation: dock-active-pulse 1.25s ease-in-out infinite;
+}
+
 html.is-scrolling .dots-bg-layer-1,
 html.is-scrolling .dots-bg-layer-2,
 html.is-scrolling .ambient-orb *,
@@ -609,6 +622,21 @@ html.is-scrolling footer {
   }
   /* Ensure 44×44px touch targets on dock */
   .dock-touch-btn { min-width: 44px !important; min-height: 44px !important; }
+
+  .dock-shell {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 0.75rem) !important;
+  }
+
+  .dock-shell > div {
+    padding: 0.45rem 0.55rem !important;
+    gap: 0.05rem;
+    overflow: visible !important;
+  }
+
+  .dock-shell [class*="self-stretch"] {
+    margin-left: 0.25rem !important;
+    margin-right: 0.25rem !important;
+  }
 }
 
 /* ── Keyframes ─────────────────────────────────────────────────── */
@@ -634,6 +662,10 @@ html.is-scrolling footer {
 @keyframes dock-breathe {
   0%,100% { transform: translateY(0px);  }
   50%     { transform: translateY(-2px); }
+}
+@keyframes dock-active-pulse {
+  0%,100% { opacity: 0.88; transform: scale(1); }
+  50%     { opacity: 1;    transform: scale(1.08); }
 }
 @keyframes ambient-float {
   0%,100% { transform: translate(0,0) scale(1);    opacity: 0.35; }

@@ -118,6 +118,8 @@ function StickyDock({
   onToggleTheme: () => void;
 }) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [pressedId, setPressedId] = useState<string | null>(null);
+  const pressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /* Brand-colored icons (bigger, bolder) */
   const dockItems = [
@@ -154,6 +156,18 @@ function StickyDock({
   const getFloatDelay = (id: string) =>
     DOCK_ITEMS_CONFIG.find(c => c.id === id)?.floatDelay ?? 0;
 
+  const showDockItemFeedback = (id: string) => {
+    setPressedId(id);
+    if (pressTimerRef.current) clearTimeout(pressTimerRef.current);
+    pressTimerRef.current = setTimeout(() => setPressedId(null), 950);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (pressTimerRef.current) clearTimeout(pressTimerRef.current);
+    };
+  }, []);
+
   let iconIdx = -1;
 
   return (
@@ -161,7 +175,7 @@ function StickyDock({
       variants={pillVariants}
       initial="hidden"
       animate="visible"
-      className="fixed bottom-5 left-1/2 z-[150] -translate-x-1/2"
+      className="dock-shell fixed bottom-5 left-1/2 z-[150] -translate-x-1/2"
     >
       {/* Pill container with shimmer sweep */}
       <div
@@ -207,7 +221,7 @@ function StickyDock({
           const cfg = DOCK_ITEMS_CONFIG.find(c => c.id === item.id);
           const brandColor = item.id === "github" && isLight ? "#000000" : (cfg?.color ?? defaultColor);
           const floatDelay = cfg?.floatDelay ?? 0;
-          const isHov = hoveredId === item.id;
+          const isActive = (hoveredId ?? pressedId) === item.id;
 
           const iconEl = (
             <motion.div
@@ -219,10 +233,12 @@ function StickyDock({
               className="relative flex flex-col items-center"
               onHoverStart={() => setHoveredId(item.id)}
               onHoverEnd={() => setHoveredId(null)}
+              onPointerDown={() => showDockItemFeedback(item.id)}
+              onFocusCapture={() => showDockItemFeedback(item.id)}
             >
               {/* Tooltip */}
               <AnimatePresence>
-                {isHov && (
+                {isActive && (
                   <motion.div
                     initial={{ opacity: 0, y: 8, scale: 0.75 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -239,14 +255,14 @@ function StickyDock({
 
               {/* Icon glow ring on hover */}
               <AnimatePresence>
-                {isHov && (
+                {isActive && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.6 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.6 }}
-                    transition={{ duration: 0.18 }}
-                    className="absolute inset-0 rounded-full pointer-events-none"
-                    style={{ boxShadow: `0 0 14px 4px ${brandColor}55`, background: `${brandColor}18` }}
+                    transition={{ type: "spring", stiffness: 420, damping: 26 }}
+                    className="dock-active-glow absolute inset-0 rounded-full pointer-events-none"
+                    style={{ boxShadow: `0 0 18px 5px ${brandColor}66`, background: `${brandColor}20` }}
                   />
                 )}
               </AnimatePresence>
@@ -262,9 +278,9 @@ function StickyDock({
                   whileHover={{ scale: 1.45, y: -8 }}
                   whileTap={{ scale: 0.76, rotate: -10 }}
                   style={{
-                    color: isHov ? brandColor : defaultColor,
-                    filter: isHov ? `drop-shadow(0 0 6px ${brandColor}88)` : "none",
-                    transition: "color 0.15s, filter 0.15s",
+                    color: isActive ? brandColor : defaultColor,
+                    filter: isActive ? `drop-shadow(0 0 8px ${brandColor}99)` : "none",
+                    transition: "color 0.18s, filter 0.18s",
                   }}
                   className="dock-touch-btn w-10 h-10 flex items-center justify-center rounded-full relative z-10"
                 >
@@ -278,9 +294,9 @@ function StickyDock({
                   whileHover={{ scale: 1.45, y: -8 }}
                   whileTap={{ scale: 0.76, rotate: 10 }}
                   style={{
-                    color: isHov ? brandColor : defaultColor,
-                    filter: isHov ? `drop-shadow(0 0 6px ${brandColor}88)` : "none",
-                    transition: "color 0.15s, filter 0.15s",
+                    color: isActive ? brandColor : defaultColor,
+                    filter: isActive ? `drop-shadow(0 0 8px ${brandColor}99)` : "none",
+                    transition: "color 0.18s, filter 0.18s",
                   }}
                   className="dock-touch-btn w-10 h-10 flex items-center justify-center rounded-full relative z-10"
                 >
@@ -290,7 +306,7 @@ function StickyDock({
 
               {/* Active dot */}
               <AnimatePresence>
-                {isHov && (
+                {isActive && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
