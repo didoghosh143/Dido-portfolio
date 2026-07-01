@@ -1,0 +1,27 @@
+Act as an expert UI/UX Frontend Developer. I need you to build a personal portfolio website with a highly specific light mode theme and design system. Do not insert any specific personal information, names, or content—only create the structural layout and styling based strictly on the following design rules. Use a modern framework (like Next.js/React) and Tailwind CSS for styling.
+​1. Global Theme & Background
+​Base Background: Pure white (#ffffff).
+​Pattern: Implement a faint, light-gray dotted grid pattern that spans the entire background. The dots should be very subtle, evenly spaced, and un-intrusive.
+​Font Family: Use a clean, modern sans-serif typeface (e.g., Inter, Roboto, or system-ui).
+​2. Typography & Text Colors
+​Primary Headings (H1, H2, H3): Pitch black (#000000), heavy font weight (bold/extrabold), with tight letter spacing.
+​Paragraph Text: Medium gray (equivalent to Tailwind's text-gray-500 or text-gray-600), readable and soft to contrast with the heavy headers.
+​Inline Highlights: Any emphasized text within paragraphs should be pitch black (#000000), bold, and underlined with a thin solid line.
+​3. Badges & Tags (3 Variations)
+​Primary Section Badges (e.g., "Podcast", "My Projects"): Pitch black background (#000000), pure white text (#ffffff), fully pill-shaped (rounded-full), with compact horizontal and vertical padding. Usually centered above section headers.
+​Dark Skill Tags: Pitch black background (#000000), pure white text (#ffffff), small text size (text-sm), slightly rounded corners (rounded-md - not pill-shaped). These should sit inside a flex-wrap container with small gaps (gap-2).
+​Light Tech Stack Tags (Inside Project Cards): Very light gray background (Tailwind's bg-gray-100 or bg-gray-200), dark gray/black text, small text size (text-xs or text-sm), slightly rounded corners (rounded-md).
+​4. Interactive Buttons
+​Action Buttons (e.g., "Website", "Source"): Pitch black background (#000000), pure white text (#ffffff), slightly rounded corners (rounded-md), containing a small monochrome icon next to the text.
+​5. Cards & Containers (Experience & Projects)
+​Background & Borders: Pure white background, bordered by a thin, light-gray outline (border border-gray-200).
+​Corners & Shadows: Large rounded corners (Tailwind's rounded-2xl or rounded-xl). Do not use heavy drop shadows; rely on the thin border for separation from the dotted background.
+​Internal Layout: Generous padding inside the cards (p-4 to p-6). For project cards, the top half should be a full-width image with rounded top corners, followed by the text description and light tech stack tags below.
+​6. Navigation Bar (Bottom Floating Dock)
+​Positioning: Fixed and sticky at the bottom center of the viewport, hovering slightly above the bottom edge.
+​Shape & Styling: Fully pill-shaped (rounded-full), pure white background, with a thin light-gray border and a very subtle drop shadow to lift it off the background.
+​Items: It should contain minimalist, monochrome SVG icons for navigation (Home, Notebook, GitHub, LinkedIn, X/Twitter, Email).
+​Theme Toggle: On the far right of the navbar, include a thin vertical divider line, followed by a sun icon button for light/dark mode toggling.
+​7. Profile Picture Layout
+​Avatar: A circular profile picture positioned to the right of the intro text (or top on mobile).
+​Background Element: The circular avatar should rest on top of a vibrant, abstract geometric background circle (utilizing a gradient of hot pink, bright blue, and yellow) cut into distinct angled sections.

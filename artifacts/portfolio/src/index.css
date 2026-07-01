@@ -355,26 +355,27 @@
 }
 
 html.light-mode {
-  /* Claude / Anthropic warm palette */
-  --accent:        #c96a2e;
-  --accent-glow:   rgba(201,106,46,0.28);
-  --accent-dim:    rgba(201,106,46,0.16);
-  --accent-subtle: rgba(201,106,46,0.08);
-  --bg:            #faf7f3;
-  --fg:            #1c1410;
-  --fg-muted:      rgba(28,20,16,0.55);
-  --fg-dim:        rgba(28,20,16,0.38);
-  --dot-primary:   rgba(28,20,16,0.18);
-  --dot-accent-c:  rgba(201,106,46,0.35);
-  --glass-bg:      rgba(255,245,235,0.72);
-  --glass-border:  rgba(201,106,46,0.18);
-  --nav-scrolled:  rgba(250,247,243,0.9);
-  --badge-bg:      #c96a2e;
+  /* Pure black / white / gray design system */
+  --accent:        #000000;
+  --accent-glow:   rgba(0,0,0,0.10);
+  --accent-dim:    rgba(0,0,0,0.06);
+  --accent-subtle: rgba(0,0,0,0.03);
+  --bg:            #ffffff;
+  --fg:            #000000;
+  --fg-muted:      #6b7280;
+  --fg-dim:        #9ca3af;
+  --dot-primary:   rgba(0,0,0,0.12);
+  --dot-accent-c:  rgba(0,0,0,0.07);
+  --glass-bg:      #ffffff;
+  --glass-border:  #e5e7eb;
+  --nav-scrolled:  rgba(255,255,255,0.95);
+  --badge-bg:      #000000;
   --badge-text:    #ffffff;
-  --orb-color:     rgba(201,106,46,0.7);
-  --cursor-glow:   rgba(201,106,46,0.08);
-  --ring-gradient: conic-gradient(from 0deg,#c96a2e,#e8904a,#fcd39a,transparent,#c96a2e);
-  --ring-dot:      #e8904a;
+  --orb-color:     rgba(0,0,0,0.05);
+  --cursor-glow:   rgba(0,0,0,0.03);
+  /* vibrant hot-pink + blue + yellow avatar ring */
+  --ring-gradient: conic-gradient(from 0deg,#ec4899,#8b5cf6,#3b82f6,#06b6d4,#eab308,#f97316,#ec4899);
+  --ring-dot:      #3b82f6;
 }
 
 html, body {
@@ -389,6 +390,7 @@ html, body {
 html.light-mode .glass-card {
   background: var(--glass-bg) !important;
   border-color: var(--glass-border) !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
 }
 html.light-mode .text-white\/40,
 html.light-mode .text-white\/45,
@@ -401,43 +403,52 @@ html.light-mode .text-white\/25,
 html.light-mode .text-white\/30,
 html.light-mode .text-white\/35 { color: var(--fg-dim) !important; }
 html.light-mode .text-white { color: var(--fg) !important; }
-html.light-mode .bg-white\/5  { background-color: rgba(0,0,0,0.05) !important; }
-html.light-mode .bg-white\/10 { background-color: rgba(0,0,0,0.08) !important; }
-html.light-mode .border-white\/10 { border-color: rgba(0,0,0,0.1) !important; }
-html.light-mode .border-white\/5  { border-color: rgba(0,0,0,0.05) !important; }
+html.light-mode .bg-white\/5  { background-color: #f9fafb !important; }
+html.light-mode .bg-white\/10 { background-color: #f3f4f6 !important; }
+html.light-mode .border-white\/10 { border-color: #e5e7eb !important; }
+html.light-mode .border-white\/5  { border-color: #f3f4f6 !important; }
 html.light-mode .bg-black\/60,
-html.light-mode .bg-black\/80 { background-color: rgba(0,0,0,0.06) !important; }
+html.light-mode .bg-black\/80 { background-color: #f9fafb !important; }
 html.light-mode .rounded-full.bg-black { background-color: var(--bg) !important; }
 /* input fields */
 html.light-mode input, html.light-mode textarea {
   color: var(--fg) !important;
+  background: #f9fafb !important;
+  border-color: #e5e7eb !important;
   caret-color: var(--accent);
 }
 
-/* Light mode: override animation shadows so nothing looks purple */
+/* Light mode: clean minimal animations — no glows */
 html.light-mode .hero-name-glow {
-  animation: hero-glow-light 5s ease-in-out infinite;
-}
-@keyframes hero-glow-light {
-  0%,100% { text-shadow: none; }
-  50%     { text-shadow: 0 0 60px rgba(201,106,46,0.18), 0 2px 24px rgba(28,20,16,0.08); }
+  animation: none;
+  text-shadow: none;
 }
 
 html.light-mode .dock-breathe {
   animation: dock-breathe-light 4s ease-in-out infinite;
 }
 @keyframes dock-breathe-light {
-  0%,100% { box-shadow: 0 4px 20px rgba(28,20,16,0.12), 0 1px 4px rgba(28,20,16,0.06); }
-  50%     { box-shadow: 0 6px 28px rgba(201,106,46,0.2), 0 1px 4px rgba(28,20,16,0.06); }
+  0%,100% { box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04); }
+  50%     { box-shadow: 0 6px 24px rgba(0,0,0,0.13), 0 1px 3px rgba(0,0,0,0.04); }
 }
 
 html.light-mode .badge-glow-override {
   animation: badge-glow-light var(--badge-dur, 3s) ease-in-out infinite;
 }
 @keyframes badge-glow-light {
-  0%,100% { box-shadow: 0 2px 8px rgba(28,20,16,0.1); }
-  50%     { box-shadow: 0 4px 18px rgba(201,106,46,0.3), 0 2px 8px rgba(28,20,16,0.08); }
+  0%,100% { box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+  50%     { box-shadow: 0 4px 14px rgba(0,0,0,0.14); }
 }
+
+/* Light mode card overrides — thin border, no heavy shadows */
+html.light-mode [class*="rounded-2xl"],
+html.light-mode [class*="rounded-xl"] {
+  box-shadow: none;
+}
+
+/* Dot grid override for light — very faint on white */
+html.light-mode .glow-cyan { box-shadow: 0 2px 12px rgba(0,0,0,0.1) !important; }
+html.light-mode .glow-cyan-text { text-shadow: none !important; }
 
 /* Nav link with theme-aware underline */
 .nav-btn::after {

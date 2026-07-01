@@ -119,6 +119,9 @@ function StickyDock({
     { icon: <Mail size={18} />, label: "Email", href: SOCIAL_LINKS.email },
   ] as const;
 
+  const iconColor  = isLight ? "#000000" : "var(--fg-muted)";
+  const hoverColor = isLight ? "#000000" : "var(--accent)";
+
   return (
     <motion.div
       initial={{ y: 80, opacity: 0 }}
@@ -129,13 +132,13 @@ function StickyDock({
       <div
         className="flex items-center gap-1 px-5 py-3 rounded-full backdrop-blur-2xl dock-breathe"
         style={{
-          background: isLight ? "rgba(255,255,255,0.82)" : "rgba(0,0,0,0.82)",
-          border: "1px solid var(--glass-border)",
+          background: isLight ? "#ffffff" : "rgba(0,0,0,0.82)",
+          border: isLight ? "1px solid #e5e7eb" : "1px solid var(--glass-border)",
         }}
       >
         {dockItems.map((item, i) => {
           if (item === "divider") {
-            return <div key={i} className="w-px h-5 mx-2" style={{ background: "var(--glass-border)" }} />;
+            return <div key={i} className="w-px h-5 mx-2" style={{ background: isLight ? "#e5e7eb" : "var(--glass-border)" }} />;
           }
           const sharedClass = "w-9 h-9 flex items-center justify-center transition-colors duration-200 rounded-full";
           const el = (
@@ -146,9 +149,9 @@ function StickyDock({
               onClick={"action" in item ? item.action : undefined}
               title={item.label}
               className={sharedClass}
-              style={{ color: "var(--fg-muted)" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "var(--accent)")}
-              onMouseLeave={e => (e.currentTarget.style.color = "var(--fg-muted)")}
+              style={{ color: iconColor }}
+              onMouseEnter={e => (e.currentTarget.style.color = hoverColor)}
+              onMouseLeave={e => (e.currentTarget.style.color = iconColor)}
             >
               {item.icon}
             </motion.button>
@@ -164,9 +167,9 @@ function StickyDock({
                 whileTap={{ scale: 0.9 }}
                 title={item.label}
                 className={sharedClass}
-                style={{ color: "var(--fg-muted)" }}
-                onMouseEnter={e => (e.currentTarget.style.color = "var(--accent)")}
-                onMouseLeave={e => (e.currentTarget.style.color = "var(--fg-muted)")}
+                style={{ color: iconColor }}
+                onMouseEnter={e => (e.currentTarget.style.color = hoverColor)}
+                onMouseLeave={e => (e.currentTarget.style.color = iconColor)}
               >
                 {item.icon}
               </motion.a>
