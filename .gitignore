@@ -1,6 +1,8 @@
 # See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # compiled output
+.next/
+out/
 dist
 tmp
 out-tsc
@@ -9,7 +11,12 @@ out-tsc
 .expo-shared
 
 # dependencies
-node_modules
+node_modules/
+
+# environment files
+.env
+.env.*
+!.env.example
 
 # IDEs and editors
 /.idea
@@ -40,6 +47,10 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# Vercel
+.vercel/
 
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md

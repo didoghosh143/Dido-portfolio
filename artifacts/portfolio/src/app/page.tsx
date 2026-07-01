@@ -338,11 +338,20 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const lenisRef = useRef<Lenis | null>(null);
-  const [isLight, setIsLight] = useState(() => {
-    try { return localStorage.getItem("theme") === "light"; } catch { return false; }
-  });
+  const [isLight, setIsLight] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+    try {
+      if (localStorage.getItem("theme") === "light") {
+        setIsLight(true);
+      }
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     if (isLight) {
       document.documentElement.classList.add("light-mode");
       localStorage.setItem("theme", "light");
@@ -350,7 +359,7 @@ export default function Home() {
       document.documentElement.classList.remove("light-mode");
       localStorage.setItem("theme", "dark");
     }
-  }, [isLight]);
+  }, [isLight, mounted]);
 
   const toggleTheme = () => setIsLight(l => !l);
 
