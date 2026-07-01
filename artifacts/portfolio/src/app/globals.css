@@ -392,6 +392,23 @@ html {
   scroll-behavior: smooth;
 }
 
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+html.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+}
+
 /* Tailwind class overrides for light mode */
 html.light-mode .glass-card {
   background: var(--glass-bg) !important;
@@ -548,6 +565,10 @@ html.light-mode .hire-me-btn:hover {
 .hero-name-glow { will-change: text-shadow; }
 /* Prevent layout thrash during scroll */
 main { contain: layout style; }
+
+.scroll-progress-bar {
+  will-change: transform;
+}
 
 html.is-scrolling .dots-bg-layer-1,
 html.is-scrolling .dots-bg-layer-2,

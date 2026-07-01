@@ -340,6 +340,7 @@ export default function Home() {
   const lenisRef = useRef<Lenis | null>(null);
   const scrolledRef = useRef(false);
   const activeSectionRef = useRef("");
+  const sectionOffsetsRef = useRef<Array<{ id: string; top: number }>>([]);
   const [isLight, setIsLight] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -369,13 +370,28 @@ export default function Home() {
   useEffect(() => {
     const sections = ["about", "skills", "projects", "contact"];
     let scrollingTimer: ReturnType<typeof setTimeout> | undefined;
+    let refreshTimer: ReturnType<typeof setTimeout> | undefined;
+    let scrollingActive = false;
+
+    const refreshSectionOffsets = () => {
+      sectionOffsetsRef.current = sections
+        .map(id => {
+          const el = document.getElementById(id);
+          return el ? { id, top: el.offsetTop } : null;
+        })
+        .filter((section): section is { id: string; top: number } => Boolean(section));
+    };
 
     const markScrolling = () => {
-      document.documentElement.classList.add("is-scrolling");
+      if (!scrollingActive) {
+        scrollingActive = true;
+        document.documentElement.classList.add("is-scrolling");
+      }
       if (scrollingTimer) clearTimeout(scrollingTimer);
       scrollingTimer = setTimeout(() => {
+        scrollingActive = false;
         document.documentElement.classList.remove("is-scrolling");
-      }, 160);
+      }, 240);
     };
 
     const updateScrollState = (scroll: number) => {
@@ -388,9 +404,9 @@ export default function Home() {
       }
 
       let current = "";
-      for (const id of sections) {
-        const el = document.getElementById(id);
-        if (el && scroll >= el.offsetTop - 160) current = id;
+      const sectionOffsets = sectionOffsetsRef.current;
+      for (const section of sectionOffsets) {
+        if (scroll >= section.top - 160) current = section.id;
       }
 
       if (activeSectionRef.current !== current) {
@@ -401,6 +417,10 @@ export default function Home() {
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const usesCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    refreshSectionOffsets();
+    refreshTimer = setTimeout(refreshSectionOffsets, 600);
+    window.addEventListener("resize", refreshSectionOffsets, { passive: true });
+    window.addEventListener("load", refreshSectionOffsets, { once: true });
 
     if (usesCoarsePointer || prefersReducedMotion) {
       const handleNativeScroll = () => updateScrollState(window.scrollY);
@@ -409,19 +429,22 @@ export default function Home() {
 
       return () => {
         window.removeEventListener("scroll", handleNativeScroll);
+        window.removeEventListener("resize", refreshSectionOffsets);
+        window.removeEventListener("load", refreshSectionOffsets);
         if (scrollingTimer) clearTimeout(scrollingTimer);
+        if (refreshTimer) clearTimeout(refreshTimer);
         document.documentElement.classList.remove("is-scrolling");
       };
     }
 
     const lenis = new Lenis({
-      duration: 1.5,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      lerp: 0.06,
+      duration: 1.25,
+      easing: (t: number) => 1 - Math.pow(1 - t, 4),
+      lerp: 0.085,
       smoothWheel: true,
       syncTouch: false,
-      touchMultiplier: 1.5,
-      wheelMultiplier: 0.6,
+      touchMultiplier: 1,
+      wheelMultiplier: 0.72,
     });
     lenisRef.current = lenis;
 
@@ -440,7 +463,10 @@ export default function Home() {
       cancelAnimationFrame(rafId);
       lenis.destroy();
       lenisRef.current = null;
+      window.removeEventListener("resize", refreshSectionOffsets);
+      window.removeEventListener("load", refreshSectionOffsets);
       if (scrollingTimer) clearTimeout(scrollingTimer);
+      if (refreshTimer) clearTimeout(refreshTimer);
       document.documentElement.classList.remove("is-scrolling");
     };
   }, []);
@@ -455,14 +481,14 @@ export default function Home() {
     const el = document.getElementById(id);
     if (!el) return;
     if (lenisRef.current) {
-      lenisRef.current.scrollTo(el, { offset: -80, duration: 0.85 });
+      lenisRef.current.scrollTo(el, { offset: -80, duration: 1 });
     } else {
       el.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const scrollTop = () => {
-    if (lenisRef.current) lenisRef.current.scrollTo(0, { duration: 0.85 });
+    if (lenisRef.current) lenisRef.current.scrollTo(0, { duration: 1 });
     else window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
