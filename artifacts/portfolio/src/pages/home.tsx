@@ -96,6 +96,16 @@ function CursorGlow() {
 }
 
 /* ─── Sticky floating dock ────────────────────────────────────────────── */
+const DOCK_ITEMS_CONFIG = [
+  { id: "theme",    label: "Theme",    color: "#f59e0b", floatDelay: 0    },
+  { id: "about",    label: "About",    color: "#6366f1", floatDelay: 0.15 },
+  { id: "github",   label: "GitHub",   color: "#ffffff", floatDelay: 0.3  },
+  { id: "linkedin", label: "LinkedIn", color: "#0ea5e9", floatDelay: 0.45 },
+  { id: "discord",  label: "Discord",  color: "#818cf8", floatDelay: 0.6  },
+  { id: "whatsapp", label: "WhatsApp", color: "#22c55e", floatDelay: 0.75 },
+  { id: "email",    label: "Email",    color: "#f43f5e", floatDelay: 0.9  },
+] as const;
+
 function StickyDock({
   onScrollTo,
   isLight,
@@ -105,46 +115,44 @@ function StickyDock({
   isLight: boolean;
   onToggleTheme: () => void;
 }) {
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
+  /* Brand-colored icons (bigger, bolder) */
   const dockItems = [
-    { icon: isLight ? <Sun size={16} /> : <Moon size={16} />, label: isLight ? "Light" : "Dark", action: onToggleTheme },
-    {
-      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>,
-      label: "About", action: () => onScrollTo("about"),
-    },
+    { id: "theme",    icon: isLight ? <Sun size={22} strokeWidth={2.5} /> : <Moon size={22} strokeWidth={2.5} />,        label: "Theme",    action: onToggleTheme },
+    { id: "about",    icon: <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>, label: "About", action: () => onScrollTo("about") },
     "divider",
-    { icon: <SiGithub size={16} />,   label: "GitHub",    href: SOCIAL_LINKS.github },
-    { icon: <Linkedin size={16} />,   label: "LinkedIn",  href: SOCIAL_LINKS.linkedin },
-    { icon: <SiDiscord size={16} />,  label: "Discord",   href: SOCIAL_LINKS.discord },
-    { icon: <SiWhatsapp size={16} />, label: "WhatsApp",  href: SOCIAL_LINKS.whatsapp },
+    { id: "github",   icon: <SiGithub size={21} />,   label: "GitHub",   href: SOCIAL_LINKS.github },
+    { id: "linkedin", icon: <Linkedin size={21} strokeWidth={2} />,  label: "LinkedIn", href: SOCIAL_LINKS.linkedin },
+    { id: "discord",  icon: <SiDiscord size={21} />,  label: "Discord",  href: SOCIAL_LINKS.discord },
+    { id: "whatsapp", icon: <SiWhatsapp size={21} />, label: "WhatsApp", href: SOCIAL_LINKS.whatsapp },
     "divider",
-    { icon: <Mail size={16} />, label: "Email", href: SOCIAL_LINKS.email },
+    { id: "email",    icon: <Mail size={21} strokeWidth={2} />, label: "Email", href: SOCIAL_LINKS.email },
   ] as const;
 
-  const iconColor  = isLight ? "#111111" : "var(--fg-muted)";
-  const hoverColor = isLight ? "#000000" : "var(--accent)";
-
-  /* Stagger each icon in from below after the pill arrives */
+  /* Pill slides up, then each icon cascades in */
   const pillVariants = {
-    hidden: { y: 100, opacity: 0 },
-    visible: {
-      y: 0, opacity: 1,
-      transition: { delay: 0.9, type: "spring", stiffness: 120, damping: 22 },
-    },
+    hidden: { y: 120, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { delay: 0.8, type: "spring", stiffness: 110, damping: 20 } },
   };
   const iconVariants = {
-    hidden: { opacity: 0, y: 18, scale: 0.5 },
+    hidden:  { opacity: 0, y: 20, scale: 0.4 },
     visible: (custom: number) => ({
       opacity: 1, y: 0, scale: 1,
-      transition: { delay: 1.1 + custom * 0.06, type: "spring", stiffness: 260, damping: 22 },
+      transition: { delay: 1.0 + custom * 0.07, type: "spring", stiffness: 280, damping: 20 },
     }),
   };
 
-  const tooltipBg   = isLight ? "#111111" : "#ffffff";
-  const tooltipText = isLight ? "#ffffff" : "#111111";
+  const tooltipBg   = isLight ? "#111" : "#fff";
+  const tooltipText = isLight ? "#fff" : "#111";
+  const defaultColor = isLight ? "#111111" : "rgba(255,255,255,0.55)";
 
-  let nonDividerIdx = -1;
+  const getItemColor = (id: string) =>
+    DOCK_ITEMS_CONFIG.find(c => c.id === id)?.color ?? defaultColor;
+  const getFloatDelay = (id: string) =>
+    DOCK_ITEMS_CONFIG.find(c => c.id === id)?.floatDelay ?? 0;
+
+  let iconIdx = -1;
 
   return (
     <motion.div
@@ -153,16 +161,31 @@ function StickyDock({
       animate="visible"
       className="fixed bottom-5 left-1/2 z-[150] -translate-x-1/2"
     >
+      {/* Pill container with shimmer sweep */}
       <div
-        className="relative flex items-center gap-0 px-3 py-2 rounded-full dock-breathe"
+        className="relative flex items-center px-3 py-2 rounded-full overflow-hidden"
         style={{
-          background: isLight ? "#ffffff" : "rgba(10,10,10,0.88)",
-          border: isLight ? "1px solid #e5e7eb" : "1px solid rgba(255,255,255,0.08)",
+          background: isLight ? "#ffffff" : "rgba(8,8,12,0.92)",
+          border: isLight ? "1px solid #e5e7eb" : "1px solid rgba(255,255,255,0.09)",
           boxShadow: isLight
-            ? "0 4px 24px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
-            : "0 4px 32px rgba(0,0,0,0.5), 0 1px 6px rgba(0,0,0,0.3)",
+            ? "0 6px 28px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.06)"
+            : "0 6px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04)",
         }}
       >
+        {/* Live shimmer sweep — GPU-composited */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none rounded-full"
+          animate={{ x: ["-120%", "220%"] }}
+          transition={{ duration: 3.5, repeat: Infinity, repeatDelay: 2.5, ease: "easeInOut" }}
+          style={{
+            background: isLight
+              ? "linear-gradient(90deg, transparent, rgba(0,0,0,0.04), rgba(79,70,229,0.08), rgba(0,0,0,0.04), transparent)"
+              : "linear-gradient(90deg, transparent, rgba(255,255,255,0.02), rgba(123,47,247,0.12), rgba(255,255,255,0.02), transparent)",
+            width: "60%",
+          }}
+        />
+
+        {/* Icons */}
         {dockItems.map((item, i) => {
           if (item === "divider") {
             return (
@@ -172,78 +195,114 @@ function StickyDock({
                 variants={iconVariants}
                 initial="hidden"
                 animate="visible"
-                className="w-px h-4 mx-1"
-                style={{ background: isLight ? "#e5e7eb" : "rgba(255,255,255,0.12)" }}
+                className="w-px mx-1.5 self-stretch my-1"
+                style={{ background: isLight ? "#e5e7eb" : "rgba(255,255,255,0.10)" }}
               />
             );
           }
 
-          nonDividerIdx++;
-          const myIdx = nonDividerIdx;
-          const isHovered = hoveredIdx === myIdx;
+          iconIdx++;
+          const cfg = DOCK_ITEMS_CONFIG.find(c => c.id === item.id);
+          const brandColor = cfg?.color ?? defaultColor;
+          const floatDelay = cfg?.floatDelay ?? 0;
+          const isHov = hoveredId === item.id;
 
-          const innerEl = (
+          const iconEl = (
             <motion.div
-              key={item.label}
+              key={item.id}
               custom={i}
               variants={iconVariants}
               initial="hidden"
               animate="visible"
               className="relative flex flex-col items-center"
-              onHoverStart={() => setHoveredIdx(myIdx)}
-              onHoverEnd={() => setHoveredIdx(null)}
+              onHoverStart={() => setHoveredId(item.id)}
+              onHoverEnd={() => setHoveredId(null)}
             >
               {/* Tooltip */}
               <AnimatePresence>
-                {isHovered && (
+                {isHov && (
                   <motion.div
-                    initial={{ opacity: 0, y: 6, scale: 0.8 }}
+                    initial={{ opacity: 0, y: 8, scale: 0.75 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 4, scale: 0.85 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 28 }}
-                    className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 rounded-md text-[10px] font-bold whitespace-nowrap pointer-events-none z-20 font-mono uppercase tracking-wide"
+                    exit={{ opacity: 0, y: 6, scale: 0.8 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                    className="absolute -top-11 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap pointer-events-none z-20 font-mono uppercase tracking-widest"
                     style={{ background: tooltipBg, color: tooltipText }}
                   >
                     {item.label}
-                    {/* Arrow */}
-                    <span
-                      className="absolute -bottom-[4px] left-1/2 -translate-x-1/2 block w-2 h-2 rotate-45"
-                      style={{ background: tooltipBg }}
-                    />
+                    <span className="absolute -bottom-[5px] left-1/2 -translate-x-1/2 block w-2.5 h-2.5 rotate-45" style={{ background: tooltipBg }} />
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              {/* Icon */}
+              {/* Icon glow ring on hover */}
+              <AnimatePresence>
+                {isHov && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.6 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.6 }}
+                    transition={{ duration: 0.18 }}
+                    className="absolute inset-0 rounded-full pointer-events-none"
+                    style={{ boxShadow: `0 0 14px 4px ${brandColor}55`, background: `${brandColor}18` }}
+                  />
+                )}
+              </AnimatePresence>
+
+              {/* Ambient float + icon button */}
               {"href" in item ? (
                 <motion.a
                   href={item.href}
                   target={item.href.startsWith("mailto") ? undefined : "_blank"}
                   rel="noreferrer"
-                  whileHover={{ scale: 1.4, y: -6 }}
-                  whileTap={{ scale: 0.78, rotate: -8 }}
-                  transition={{ type: "spring", stiffness: 350, damping: 20 }}
-                  className="dock-touch-btn w-9 h-9 flex items-center justify-center rounded-full transition-colors duration-150"
-                  style={{ color: isHovered ? hoverColor : iconColor }}
+                  animate={{ y: [0, -4, 0] }}
+                  transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: floatDelay }}
+                  whileHover={{ scale: 1.45, y: -8 }}
+                  whileTap={{ scale: 0.76, rotate: -10 }}
+                  style={{
+                    color: isHov ? brandColor : defaultColor,
+                    filter: isHov ? `drop-shadow(0 0 6px ${brandColor}88)` : "none",
+                    transition: "color 0.15s, filter 0.15s",
+                  }}
+                  className="dock-touch-btn w-10 h-10 flex items-center justify-center rounded-full relative z-10"
                 >
                   {item.icon}
                 </motion.a>
               ) : (
                 <motion.button
                   onClick={item.action}
-                  whileHover={{ scale: 1.4, y: -6 }}
-                  whileTap={{ scale: 0.78, rotate: 8 }}
-                  transition={{ type: "spring", stiffness: 350, damping: 20 }}
-                  className="dock-touch-btn w-9 h-9 flex items-center justify-center rounded-full transition-colors duration-150"
-                  style={{ color: isHovered ? hoverColor : iconColor }}
+                  animate={{ y: [0, -4, 0] }}
+                  transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: floatDelay }}
+                  whileHover={{ scale: 1.45, y: -8 }}
+                  whileTap={{ scale: 0.76, rotate: 10 }}
+                  style={{
+                    color: isHov ? brandColor : defaultColor,
+                    filter: isHov ? `drop-shadow(0 0 6px ${brandColor}88)` : "none",
+                    transition: "color 0.15s, filter 0.15s",
+                  }}
+                  className="dock-touch-btn w-10 h-10 flex items-center justify-center rounded-full relative z-10"
                 >
                   {item.icon}
                 </motion.button>
               )}
+
+              {/* Active dot */}
+              <AnimatePresence>
+                {isHov && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                    className="absolute -bottom-1.5 w-1 h-1 rounded-full"
+                    style={{ background: brandColor }}
+                  />
+                )}
+              </AnimatePresence>
             </motion.div>
           );
 
-          return innerEl;
+          return iconEl;
         })}
       </div>
     </motion.div>
