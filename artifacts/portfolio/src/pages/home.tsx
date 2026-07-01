@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useSpring, useMotionValue, useScroll, useTransform } from "framer-motion";
+import { motion, useSpring, useMotionValue, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Lenis from "lenis";
 import { TypeAnimation } from "react-type-animation";
 import { Terminal, Mail, Linkedin, Sun, Moon } from "lucide-react";
@@ -105,83 +105,145 @@ function StickyDock({
   isLight: boolean;
   onToggleTheme: () => void;
 }) {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
   const dockItems = [
+    { icon: isLight ? <Sun size={16} /> : <Moon size={16} />, label: isLight ? "Light" : "Dark", action: onToggleTheme },
     {
-      icon: isLight ? <Sun size={18} /> : <Moon size={18} />,
-      label: isLight ? "Light Mode" : "Dark Mode",
-      action: onToggleTheme,
-    },
-    {
-      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>,
-      label: "About",
-      action: () => onScrollTo("about"),
+      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>,
+      label: "About", action: () => onScrollTo("about"),
     },
     "divider",
-    { icon: <SiGithub size={18} />, label: "GitHub", href: SOCIAL_LINKS.github },
-    { icon: <Linkedin size={18} />, label: "LinkedIn", href: SOCIAL_LINKS.linkedin },
-    { icon: <SiDiscord size={18} />, label: "Discord", href: SOCIAL_LINKS.discord },
-    { icon: <SiWhatsapp size={18} />, label: "WhatsApp", href: SOCIAL_LINKS.whatsapp },
+    { icon: <SiGithub size={16} />,   label: "GitHub",    href: SOCIAL_LINKS.github },
+    { icon: <Linkedin size={16} />,   label: "LinkedIn",  href: SOCIAL_LINKS.linkedin },
+    { icon: <SiDiscord size={16} />,  label: "Discord",   href: SOCIAL_LINKS.discord },
+    { icon: <SiWhatsapp size={16} />, label: "WhatsApp",  href: SOCIAL_LINKS.whatsapp },
     "divider",
-    { icon: <Mail size={18} />, label: "Email", href: SOCIAL_LINKS.email },
+    { icon: <Mail size={16} />, label: "Email", href: SOCIAL_LINKS.email },
   ] as const;
 
-  const iconColor  = isLight ? "#000000" : "var(--fg-muted)";
+  const iconColor  = isLight ? "#111111" : "var(--fg-muted)";
   const hoverColor = isLight ? "#000000" : "var(--accent)";
+
+  /* Stagger each icon in from below after the pill arrives */
+  const pillVariants = {
+    hidden: { y: 100, opacity: 0 },
+    visible: {
+      y: 0, opacity: 1,
+      transition: { delay: 0.9, type: "spring", stiffness: 120, damping: 22 },
+    },
+  };
+  const iconVariants = {
+    hidden: { opacity: 0, y: 18, scale: 0.5 },
+    visible: (custom: number) => ({
+      opacity: 1, y: 0, scale: 1,
+      transition: { delay: 1.1 + custom * 0.06, type: "spring", stiffness: 260, damping: 22 },
+    }),
+  };
+
+  const tooltipBg   = isLight ? "#111111" : "#ffffff";
+  const tooltipText = isLight ? "#ffffff" : "#111111";
+
+  let nonDividerIdx = -1;
 
   return (
     <motion.div
-      initial={{ y: 80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 1.2, type: "spring", stiffness: 80, damping: 18 }}
-      className="fixed bottom-6 left-1/2 z-[150] -translate-x-1/2"
+      variants={pillVariants}
+      initial="hidden"
+      animate="visible"
+      className="fixed bottom-5 left-1/2 z-[150] -translate-x-1/2"
     >
       <div
-        className="flex items-center gap-1 px-5 py-3 rounded-full backdrop-blur-2xl dock-breathe"
+        className="relative flex items-center gap-0 px-3 py-2 rounded-full dock-breathe"
         style={{
-          background: isLight ? "#ffffff" : "rgba(0,0,0,0.82)",
-          border: isLight ? "1px solid #e5e7eb" : "1px solid var(--glass-border)",
+          background: isLight ? "#ffffff" : "rgba(10,10,10,0.88)",
+          border: isLight ? "1px solid #e5e7eb" : "1px solid rgba(255,255,255,0.08)",
+          boxShadow: isLight
+            ? "0 4px 24px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
+            : "0 4px 32px rgba(0,0,0,0.5), 0 1px 6px rgba(0,0,0,0.3)",
         }}
       >
         {dockItems.map((item, i) => {
           if (item === "divider") {
-            return <div key={i} className="w-px h-5 mx-2" style={{ background: isLight ? "#e5e7eb" : "var(--glass-border)" }} />;
-          }
-          const sharedClass = "dock-touch-btn w-11 h-11 flex items-center justify-center transition-colors duration-200 rounded-full";
-          const el = (
-            <motion.button
-              key={item.label}
-              whileHover={{ scale: 1.25 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={"action" in item ? item.action : undefined}
-              title={item.label}
-              className={sharedClass}
-              style={{ color: iconColor }}
-              onMouseEnter={e => (e.currentTarget.style.color = hoverColor)}
-              onMouseLeave={e => (e.currentTarget.style.color = iconColor)}
-            >
-              {item.icon}
-            </motion.button>
-          );
-          if ("href" in item) {
             return (
-              <motion.a
-                key={item.label}
-                href={item.href}
-                target={item.href.startsWith("mailto") ? undefined : "_blank"}
-                rel="noreferrer"
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.88 }}
-                title={item.label}
-                className={sharedClass}
-                style={{ color: iconColor }}
-                onMouseEnter={e => (e.currentTarget.style.color = hoverColor)}
-                onMouseLeave={e => (e.currentTarget.style.color = iconColor)}
-              >
-                {item.icon}
-              </motion.a>
+              <motion.div
+                key={`div-${i}`}
+                custom={i}
+                variants={iconVariants}
+                initial="hidden"
+                animate="visible"
+                className="w-px h-4 mx-1"
+                style={{ background: isLight ? "#e5e7eb" : "rgba(255,255,255,0.12)" }}
+              />
             );
           }
-          return el;
+
+          nonDividerIdx++;
+          const myIdx = nonDividerIdx;
+          const isHovered = hoveredIdx === myIdx;
+
+          const innerEl = (
+            <motion.div
+              key={item.label}
+              custom={i}
+              variants={iconVariants}
+              initial="hidden"
+              animate="visible"
+              className="relative flex flex-col items-center"
+              onHoverStart={() => setHoveredIdx(myIdx)}
+              onHoverEnd={() => setHoveredIdx(null)}
+            >
+              {/* Tooltip */}
+              <AnimatePresence>
+                {isHovered && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6, scale: 0.8 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 4, scale: 0.85 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 28 }}
+                    className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 rounded-md text-[10px] font-bold whitespace-nowrap pointer-events-none z-20 font-mono uppercase tracking-wide"
+                    style={{ background: tooltipBg, color: tooltipText }}
+                  >
+                    {item.label}
+                    {/* Arrow */}
+                    <span
+                      className="absolute -bottom-[4px] left-1/2 -translate-x-1/2 block w-2 h-2 rotate-45"
+                      style={{ background: tooltipBg }}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Icon */}
+              {"href" in item ? (
+                <motion.a
+                  href={item.href}
+                  target={item.href.startsWith("mailto") ? undefined : "_blank"}
+                  rel="noreferrer"
+                  whileHover={{ scale: 1.4, y: -6 }}
+                  whileTap={{ scale: 0.78, rotate: -8 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                  className="dock-touch-btn w-9 h-9 flex items-center justify-center rounded-full transition-colors duration-150"
+                  style={{ color: isHovered ? hoverColor : iconColor }}
+                >
+                  {item.icon}
+                </motion.a>
+              ) : (
+                <motion.button
+                  onClick={item.action}
+                  whileHover={{ scale: 1.4, y: -6 }}
+                  whileTap={{ scale: 0.78, rotate: 8 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                  className="dock-touch-btn w-9 h-9 flex items-center justify-center rounded-full transition-colors duration-150"
+                  style={{ color: isHovered ? hoverColor : iconColor }}
+                >
+                  {item.icon}
+                </motion.button>
+              )}
+            </motion.div>
+          );
+
+          return innerEl;
         })}
       </div>
     </motion.div>
