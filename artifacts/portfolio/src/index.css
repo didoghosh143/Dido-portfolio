@@ -357,6 +357,7 @@
 html.light-mode {
   /* Pure black / white / gray design system */
   --accent:        #000000;
+  --accent-fg:     #ffffff;   /* text ON TOP of accent-bg buttons */
   --accent-glow:   rgba(0,0,0,0.10);
   --accent-dim:    rgba(0,0,0,0.06);
   --accent-subtle: rgba(0,0,0,0.03);
@@ -402,7 +403,8 @@ html.light-mode .text-white\/80 { color: var(--fg-muted) !important; }
 html.light-mode .text-white\/25,
 html.light-mode .text-white\/30,
 html.light-mode .text-white\/35 { color: var(--fg-dim) !important; }
-html.light-mode .text-white { color: var(--fg) !important; }
+/* Only override text-white that is NOT already forced by an inline style */
+html.light-mode .text-white:not([style*="color"]) { color: var(--fg) !important; }
 html.light-mode .bg-white\/5  { background-color: #f9fafb !important; }
 html.light-mode .bg-white\/10 { background-color: #f3f4f6 !important; }
 html.light-mode .border-white\/10 { border-color: #e5e7eb !important; }

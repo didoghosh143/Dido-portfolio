@@ -438,8 +438,8 @@ export default function Home() {
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => scrollTo("projects")}
-                  className="px-8 py-3 rounded text-white font-mono text-sm font-bold uppercase tracking-wide transition-colors duration-200"
-                  style={{ background: "var(--accent)", boxShadow: "0 0 24px var(--accent-glow)" }}
+                  className="px-8 py-3 rounded font-mono text-sm font-bold uppercase tracking-wide transition-colors duration-200"
+                  style={{ background: "var(--accent)", color: "#ffffff", boxShadow: "0 0 24px var(--accent-glow)" }}
                 >
                   View My Work
                 </motion.button>
@@ -743,8 +743,8 @@ export default function Home() {
                   type="submit"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full py-3.5 mt-1 rounded-lg text-white font-bold uppercase tracking-widest text-sm transition-all duration-200"
-                  style={{ background: "var(--accent)", boxShadow: "0 0 28px var(--accent-glow)" }}
+                  className="w-full py-3.5 mt-1 rounded-lg font-bold uppercase tracking-widest text-sm transition-all duration-200"
+                  style={{ background: "var(--accent)", color: "#ffffff", boxShadow: "0 0 28px var(--accent-glow)" }}
                 >
                   Send Message →
                 </motion.button>
